@@ -3,6 +3,14 @@
 **/.env
 *.env
 
+# Conversation transcripts (có thể chứa secrets user paste trong chat)
+_transcripts/
+
+# Local screenshots / temp images
+image.png
+image-*.png
+screenshot-*.png
+
 # Build artifacts
 **/node_modules/
 **/.venv/

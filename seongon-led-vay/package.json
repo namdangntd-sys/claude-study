@@ -1,0 +1,20 @@
+{
+  "name": "seongon-led-vay",
+  "version": "1.0.0",
+  "description": "SEONGON SG — Bảng LED vẫy 2 mặt: trang web full-stack với công cụ thiết kế AI",
+  "main": "server.js",
+  "type": "module",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.40.1",
+    "express": "^4.21.2",
+    "express-rate-limit": "^7.5.0",
+    "resend": "^6.12.3"
+  }
+}

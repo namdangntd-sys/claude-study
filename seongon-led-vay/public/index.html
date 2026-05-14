@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>SEONGON SG — Bảng LED Vẫy 2 Mặt | Thiết kế trực tiếp, xem ngay kết quả</title>
-  <meta name="description" content="SEONGON SG — Thi công bảng LED vẫy 2 mặt cho cửa hàng. Tự thiết kế bảng hiệu của bạn ngay trên web, xem trước mô phỏng đúng tỷ lệ thật (LED 5mm, khoảng cách 10mm). Bảo hành 12 tháng." />
+  <meta name="description" content="SEONGON SG — Thi công bảng LED vẫy 2 mặt cho cửa hàng. Tự thiết kế bảng hiệu của bạn ngay trên web, xem trước hình ảnh mô phỏng rực rỡ trước khi đặt sản xuất. Bảo hành 12 tháng." />
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -199,7 +199,7 @@
         Hút khách từ <em class="text-yellow-300 not-italic glow-yellow">cả hai hướng</em> đường
       </h1>
       <p class="text-base sm:text-lg text-slate-300 leading-relaxed mb-8 max-w-xl">
-        Thiết kế bảng hiệu LED vẫy của riêng bạn ngay trên web — xem trước kết quả mô phỏng <strong class="text-white">đúng tỷ lệ thật</strong> (LED 5mm, khoảng cách 10mm) trước khi đặt sản xuất.
+        Thiết kế bảng hiệu LED vẫy của riêng bạn ngay trên web — xem trước <strong class="text-white">hình ảnh mô phỏng rực rỡ</strong> với ánh sáng LED phát quang, trước khi đặt sản xuất.
       </p>
       <div class="flex flex-wrap gap-3 mb-10">
         <a href="#designer" class="group inline-flex items-center gap-2 bg-brand-500 hover:bg-brand-600 px-6 py-3.5 rounded-xl font-bold transition shadow-lg shadow-brand-500/30">
@@ -263,13 +263,52 @@
         Tự thiết kế bảng LED vẫy<br><span class="text-brand-500 glow-text">của riêng bạn</span>
       </h2>
       <p class="text-slate-400 leading-relaxed">
-        Chọn kích thước, nhập thông tin thương hiệu, chỉnh màu sắc — kết quả mô phỏng <strong class="text-white">đúng tỉ lệ thật</strong> (LED 5mm, khoảng cách 10mm tâm-tâm) hiện ra ngay.
+        Chọn kích thước, nhập thông tin thương hiệu, chỉnh màu sắc — bảng của bạn sẽ <strong class="text-white">rực sáng ngay trước mắt</strong> với hiệu ứng LED phát quang đẹp như thật.
       </p>
     </div>
 
     <div class="grid lg:grid-cols-[1fr_540px] gap-8">
       <!-- ============ Control Panel ============ -->
       <div class="space-y-6">
+
+        <!-- ============ AI QUICK START ============ -->
+        <div class="relative overflow-hidden bg-gradient-to-br from-yellow-400/10 via-brand-500/5 to-slate-950/70 border-2 border-yellow-400/30 rounded-2xl p-5 sm:p-6">
+          <div class="absolute -top-12 -right-12 w-40 h-40 rounded-full bg-yellow-400/10 blur-3xl pointer-events-none"></div>
+          <div class="relative">
+            <div class="flex items-center gap-3 mb-3">
+              <span class="step-num" style="background: linear-gradient(135deg, #fde047, #f59e0b);">✨</span>
+              <h3 class="text-lg font-bold">AI thiết kế giúp bạn <span class="text-yellow-300 text-xs font-semibold ml-1">— Mới!</span></h3>
+            </div>
+            <p class="text-sm text-slate-300 mb-3 leading-relaxed">
+              Chỉ cần mô tả cửa hàng/dịch vụ — AI sẽ tự chọn nội dung, màu sắc, font, hiệu ứng phù hợp nhất.
+            </p>
+            <div class="space-y-3">
+              <textarea id="ai-input" rows="2" maxlength="500"
+                class="field resize-none text-sm leading-relaxed"
+                placeholder="VD: Cafe Sương Mai bán cafe sữa đá và bánh ngọt, hotline 0909.111.222"></textarea>
+              <div class="flex flex-wrap items-center gap-2">
+                <button id="ai-generate-btn" class="inline-flex items-center gap-2 bg-yellow-400 hover:bg-yellow-300 text-slate-900 px-5 py-2.5 rounded-xl font-bold text-sm transition shadow-lg disabled:opacity-60 disabled:cursor-not-allowed">
+                  <span id="ai-btn-label">✨ AI thiết kế giúp tôi</span>
+                  <svg id="ai-spinner" class="hidden w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24">
+                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/>
+                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"/>
+                  </svg>
+                </button>
+                <span class="text-xs text-slate-400">hoặc tự chỉnh thủ công bên dưới</span>
+              </div>
+              <div id="ai-suggestions" class="flex flex-wrap gap-1.5 pt-1">
+                <button class="ai-example chip text-xs" data-text="Phở Hà Nội Cô Lan, phở bò gia truyền, 0909 111 222">🍜 Phở</button>
+                <button class="ai-example chip text-xs" data-text="Cafe Sương Mai, cafe sữa đá và bánh ngọt, 0909 333 444">☕ Cafe</button>
+                <button class="ai-example chip text-xs" data-text="Nail Luxury Spa, làm móng và chăm sóc tóc cao cấp">💅 Nail/Spa</button>
+                <button class="ai-example chip text-xs" data-text="Karaoke 5 sao Diamond, phòng hát VIP, mở cả đêm">🎤 Karaoke</button>
+                <button class="ai-example chip text-xs" data-text="Nhà thuốc An Khang, dược phẩm chính hãng, 24/7">💊 Nhà thuốc</button>
+                <button class="ai-example chip text-xs" data-text="Shop thời trang nữ Mira, váy đầm và phụ kiện">👗 Thời trang</button>
+              </div>
+              <div id="ai-result" class="hidden p-3 rounded-lg bg-slate-900/60 border border-slate-800 text-xs text-slate-300 leading-relaxed"></div>
+              <div id="ai-error" class="hidden p-3 rounded-lg bg-red-500/10 border border-red-500/30 text-xs text-red-300"></div>
+            </div>
+          </div>
+        </div>
 
         <!-- Step 1: Size -->
         <div class="bg-slate-950/70 border border-slate-800 rounded-2xl p-5 sm:p-6">
@@ -416,9 +455,9 @@
           <button id="download-btn" class="inline-flex items-center gap-2 bg-yellow-400 hover:bg-yellow-300 text-slate-900 px-5 py-3 rounded-xl font-bold transition shadow-lg">
             📥 Tải ảnh thiết kế (PNG)
           </button>
-          <a href="#contact" id="quote-btn" class="inline-flex items-center gap-2 bg-brand-500 hover:bg-brand-600 px-5 py-3 rounded-xl font-bold transition shadow-lg shadow-brand-500/20">
-            📞 Gửi thiết kế này để báo giá
-          </a>
+          <button type="button" id="quote-btn" class="inline-flex items-center gap-2 bg-brand-500 hover:bg-brand-600 px-5 py-3 rounded-xl font-bold transition shadow-lg shadow-brand-500/20">
+            📨 Gửi thiết kế nhận báo giá
+          </button>
           <button id="reset-btn" class="inline-flex items-center gap-2 bg-slate-800 hover:bg-slate-700 px-5 py-3 rounded-xl font-semibold transition border border-slate-700 text-sm">
             ↻ Khôi phục mặc định
           </button>
@@ -431,7 +470,7 @@
           <div class="flex items-center justify-between mb-4">
             <div>
               <h3 class="font-bold">Xem trước</h3>
-              <div class="text-xs text-slate-400 mt-0.5">Mô phỏng đúng tỷ lệ thật</div>
+              <div class="text-xs text-slate-400 mt-0.5">Mô phỏng LED phát quang</div>
             </div>
             <div class="inline-flex bg-slate-900 rounded-lg p-1 gap-1 text-xs">
               <button class="mode-btn px-3 py-1.5 rounded-md font-semibold transition" data-mode="night">🌙 Đêm</button>
@@ -459,7 +498,7 @@
           </div>
 
           <div class="mt-4 text-[11px] text-slate-500 leading-relaxed">
-            * Mỗi điểm sáng là <strong class="text-slate-300">1 bóng LED ruồi F5</strong> (đường kính 5mm), tâm-tâm cách nhau 10mm. Bóng chỉ được khoan lỗ và cắm tại <strong class="text-slate-300">đúng viền nét chữ</strong> (chữ rỗng ở giữa) — đúng nguyên lý biển vẫy thực tế: CNC khoan lỗ trên Alu 3mm theo file thiết kế, sau đó cắm bóng LED tương ứng.
+            * Hình ảnh là <strong class="text-slate-300">mô phỏng minh hoạ</strong> hiệu ứng LED phát quang trên web. Bảng thật được CNC khoan lỗ trên tấm Alu 3mm theo đúng file thiết kế, sau đó cắm bóng LED ruồi F5 (đường kính 5mm, cách nhau 10mm tâm-tâm) — sản phẩm thực tế rực rỡ, sắc nét và hiển thị tốt cả ngày lẫn đêm.
           </div>
         </div>
       </div>
@@ -814,8 +853,77 @@
   </div>
 </footer>
 
-<!-- ============================================ MODAL: SEND REQUEST (simple) ============================================ -->
-<!-- (Optional, kept light — user can extend) -->
+<!-- ============================================ MODAL: SEND QUOTE REQUEST ============================================ -->
+<div id="quote-modal" class="fixed inset-0 z-[100] hidden items-center justify-center bg-black/75 backdrop-blur-sm p-4 overflow-y-auto">
+  <div class="bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-lg my-4 sm:my-8 relative shadow-2xl">
+    <button type="button" id="quote-modal-close"
+      class="absolute top-3 right-3 w-9 h-9 rounded-lg hover:bg-slate-800 text-slate-400 hover:text-white text-2xl flex items-center justify-center transition"
+      aria-label="Đóng">×</button>
+
+    <div class="p-6 sm:p-8">
+      <div class="flex items-center gap-3 mb-2">
+        <span class="step-num" style="background: linear-gradient(135deg, #ef3b3b, #b81e1e);">✉</span>
+        <h3 class="text-lg sm:text-xl font-bold">Gửi thiết kế để báo giá</h3>
+      </div>
+      <p class="text-sm text-slate-400 mb-5">SEONGON SG sẽ liên hệ báo giá trong vòng <strong class="text-white">2 giờ làm việc</strong>.</p>
+
+      <form id="quote-form" class="space-y-4" novalidate>
+        <div>
+          <label class="block text-sm font-semibold mb-1.5">Họ tên <span class="text-brand-300">*</span></label>
+          <input type="text" name="name" class="field" required maxlength="100" placeholder="VD: Nguyễn Văn A">
+        </div>
+        <div class="grid sm:grid-cols-2 gap-3">
+          <div>
+            <label class="block text-sm font-semibold mb-1.5">Số điện thoại <span class="text-brand-300">*</span></label>
+            <input type="tel" name="phone" class="field" required maxlength="20" placeholder="0909 999 999">
+          </div>
+          <div>
+            <label class="block text-sm font-semibold mb-1.5">Email <span class="text-slate-500 font-normal">(không bắt buộc)</span></label>
+            <input type="email" name="email" class="field" maxlength="100" placeholder="email@example.com">
+          </div>
+        </div>
+        <div>
+          <label class="block text-sm font-semibold mb-1.5">Địa chỉ cửa hàng <span class="text-slate-500 font-normal">(không bắt buộc)</span></label>
+          <input type="text" name="address" class="field" maxlength="300" placeholder="VD: 123 Lê Lợi, Q.1, TP.HCM">
+        </div>
+        <div>
+          <label class="block text-sm font-semibold mb-1.5">Ghi chú thêm <span class="text-slate-500 font-normal">(không bắt buộc)</span></label>
+          <textarea name="note" rows="2" class="field resize-none" maxlength="1500"
+            placeholder="VD: Ngành hàng, thời gian cần lắp, yêu cầu đặc biệt..."></textarea>
+        </div>
+
+        <div class="bg-slate-950 border border-slate-800 rounded-lg p-3 text-xs text-slate-400">
+          <div class="font-semibold text-white mb-1.5 flex items-center gap-1.5">
+            <span>📦</span> Kèm theo thiết kế hiện tại:
+          </div>
+          <div id="quote-design-summary" class="leading-relaxed">—</div>
+        </div>
+
+        <div id="quote-error" class="hidden p-3 rounded-lg bg-red-500/10 border border-red-500/30 text-sm text-red-300"></div>
+        <div id="quote-success" class="hidden p-4 rounded-lg bg-emerald-500/10 border border-emerald-500/30 text-sm text-emerald-200 leading-relaxed"></div>
+
+        <div class="flex gap-3 pt-1">
+          <button type="submit" id="quote-submit"
+            class="flex-1 inline-flex items-center justify-center gap-2 bg-brand-500 hover:bg-brand-600 px-5 py-3 rounded-xl font-bold transition shadow-lg shadow-brand-500/20 disabled:opacity-60 disabled:cursor-not-allowed">
+            <span id="quote-submit-label">📨 Gửi yêu cầu báo giá</span>
+            <svg id="quote-spinner" class="hidden w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24">
+              <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/>
+              <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"/>
+            </svg>
+          </button>
+          <button type="button" id="quote-cancel"
+            class="px-5 py-3 rounded-xl font-semibold border border-slate-700 hover:bg-slate-800 text-slate-300 transition">
+            Huỷ
+          </button>
+        </div>
+
+        <p class="text-[11px] text-slate-500 pt-1">
+          Bằng việc gửi yêu cầu, bạn đồng ý để SEONGON SG liên hệ qua các kênh đã cung cấp.
+        </p>
+      </form>
+    </div>
+  </div>
+</div>
 
 <!-- ============================================ SCRIPT ============================================ -->
 <script>
@@ -872,327 +980,6 @@ const FONTS = [
   { id: 'display', name: 'Đậm in',     family: 'Bebas Neue',     wSingle: '400', wOutline: '400', scale: 1.05 },
   { id: 'script',  name: 'Viết tay',   family: 'Dancing Script', wSingle: '400', wOutline: '700', scale: 1.20 }
 ];
-
-// 5 nấc cỡ chữ — chi tiết mapping ở LEVEL_TO_FONT (đặt sau khi định nghĩa fonts).
-
-// ============================================================================
-// BITMAP FONTS — hand-coded, pixel-perfect cho LED rendering
-// Mỗi glyph là ma trận W×H, 'X' = bóng LED ON, '.' = không có lỗ.
-// Render trực tiếp vào lưới LED — KHÔNG qua Canvas font, không AA, không hinting.
-// ============================================================================
-
-// FONT 3×5 — micro size, chỉ uppercase + digits (lowercase fallback uppercase)
-const FONT_3x5 = {
-  W: 3, H: 5,
-  chars: {
-    '0':['XXX','X.X','X.X','X.X','XXX'],
-    '1':['XX.','.X.','.X.','.X.','XXX'],
-    '2':['XXX','..X','XXX','X..','XXX'],
-    '3':['XXX','..X','XXX','..X','XXX'],
-    '4':['X.X','X.X','XXX','..X','..X'],
-    '5':['XXX','X..','XXX','..X','XXX'],
-    '6':['XXX','X..','XXX','X.X','XXX'],
-    '7':['XXX','..X','.X.','.X.','X..'],
-    '8':['XXX','X.X','XXX','X.X','XXX'],
-    '9':['XXX','X.X','XXX','..X','XXX'],
-    ' ':['...','...','...','...','...'],
-    '.':['...','...','...','...','.X.'],
-    ',':['...','...','...','.X.','X..'],
-    '-':['...','...','XXX','...','...'],
-    '/':['..X','..X','.X.','X..','X..'],
-    '!':['.X.','.X.','.X.','...','.X.'],
-    '?':['XX.','..X','.X.','...','.X.'],
-    ':':['...','.X.','...','.X.','...'],
-    'A':['.X.','X.X','XXX','X.X','X.X'],
-    'B':['XX.','X.X','XX.','X.X','XX.'],
-    'C':['XXX','X..','X..','X..','XXX'],
-    'D':['XX.','X.X','X.X','X.X','XX.'],
-    'E':['XXX','X..','XX.','X..','XXX'],
-    'F':['XXX','X..','XX.','X..','X..'],
-    'G':['XXX','X..','X.X','X.X','XXX'],
-    'H':['X.X','X.X','XXX','X.X','X.X'],
-    'I':['XXX','.X.','.X.','.X.','XXX'],
-    'J':['..X','..X','..X','X.X','XX.'],
-    'K':['X.X','X.X','XX.','X.X','X.X'],
-    'L':['X..','X..','X..','X..','XXX'],
-    'M':['X.X','XXX','XXX','X.X','X.X'],
-    'N':['X.X','XX.','XXX','.XX','X.X'],
-    'O':['XXX','X.X','X.X','X.X','XXX'],
-    'P':['XX.','X.X','XX.','X..','X..'],
-    'Q':['XXX','X.X','X.X','XX.','.XX'],
-    'R':['XX.','X.X','XX.','X.X','X.X'],
-    'S':['XXX','X..','.X.','..X','XXX'],
-    'T':['XXX','.X.','.X.','.X.','.X.'],
-    'U':['X.X','X.X','X.X','X.X','XXX'],
-    'V':['X.X','X.X','X.X','X.X','.X.'],
-    'W':['X.X','X.X','XXX','XXX','X.X'],
-    'X':['X.X','X.X','.X.','X.X','X.X'],
-    'Y':['X.X','X.X','.X.','.X.','.X.'],
-    'Z':['XXX','..X','.X.','X..','XXX'],
-    'Đ':['XX.','X.X','XXX','X.X','XX.']   // D với crossbar (Đ)
-  }
-};
-
-// FONT 5×7 — full size, có lowercase + Vietnamese đầy đủ
-const FONT_5x7 = {
-  W: 5, H: 7,
-  chars: {
-  // ----- Digits -----
-  '0': [' XXX ','X...X','X..XX','X.X.X','XX..X','X...X',' XXX '],
-  '1': ['..X..','.XX..','..X..','..X..','..X..','..X..','.XXX.'],
-  '2': [' XXX ','X...X','....X','...X.','..X..','.X...','XXXXX'],
-  '3': [' XXX ','X...X','....X','..XX.','....X','X...X',' XXX '],
-  '4': ['...X.','..XX.','.X.X.','X..X.','XXXXX','...X.','...X.'],
-  '5': ['XXXXX','X....','XXXX.','....X','....X','X...X',' XXX '],
-  '6': [' XXX ','X....','X....','XXXX.','X...X','X...X',' XXX '],
-  '7': ['XXXXX','....X','...X.','..X..','.X...','.X...','.X...'],
-  '8': [' XXX ','X...X','X...X',' XXX ','X...X','X...X',' XXX '],
-  '9': [' XXX ','X...X','X...X',' XXXX','....X','....X',' XXX '],
-
-  // ----- Space + punctuation -----
-  ' ': ['.....','.....','.....','.....','.....','.....','.....'],
-  '.': ['.....','.....','.....','.....','.....','..X..','..X..'],
-  ',': ['.....','.....','.....','.....','.....','..X..','.X...'],
-  '!': ['..X..','..X..','..X..','..X..','..X..','.....','..X..'],
-  '?': [' XXX ','X...X','....X','...X.','..X..','.....','..X..'],
-  '-': ['.....','.....','.....','XXXXX','.....','.....','.....'],
-  '/': ['....X','....X','...X.','..X..','.X...','X....','X....'],
-  ':': ['.....','..X..','.....','.....','.....','..X..','.....'],
-  '+': ['.....','..X..','..X..','XXXXX','..X..','..X..','.....'],
-  '*': ['.....','X.X.X','.XXX.','XXXXX','.XXX.','X.X.X','.....'],
-  '(': ['..XX.','.X...','.X...','.X...','.X...','.X...','..XX.'],
-  ')': ['.XX..','...X.','...X.','...X.','...X.','...X.','.XX..'],
-
-  // ----- Uppercase A-Z -----
-  'A': [' XXX ','X...X','X...X','XXXXX','X...X','X...X','X...X'],
-  'B': ['XXXX.','X...X','X...X','XXXX.','X...X','X...X','XXXX.'],
-  'C': [' XXXX','X....','X....','X....','X....','X....',' XXXX'],
-  'D': ['XXXX.','X...X','X...X','X...X','X...X','X...X','XXXX.'],
-  'E': ['XXXXX','X....','X....','XXXX.','X....','X....','XXXXX'],
-  'F': ['XXXXX','X....','X....','XXXX.','X....','X....','X....'],
-  'G': [' XXXX','X....','X....','X..XX','X...X','X...X',' XXXX'],
-  'H': ['X...X','X...X','X...X','XXXXX','X...X','X...X','X...X'],
-  'I': [' XXX.','..X..','..X..','..X..','..X..','..X..',' XXX.'],
-  'J': ['..XXX','...X.','...X.','...X.','...X.','X..X.',' XX..'],
-  'K': ['X...X','X..X.','X.X..','XX...','X.X..','X..X.','X...X'],
-  'L': ['X....','X....','X....','X....','X....','X....','XXXXX'],
-  'M': ['X...X','XX.XX','X.X.X','X...X','X...X','X...X','X...X'],
-  'N': ['X...X','XX..X','X.X.X','X..XX','X...X','X...X','X...X'],
-  'O': [' XXX ','X...X','X...X','X...X','X...X','X...X',' XXX '],
-  'P': ['XXXX.','X...X','X...X','XXXX.','X....','X....','X....'],
-  'Q': [' XXX ','X...X','X...X','X...X','X.X.X','X..X.',' XX.X'],
-  'R': ['XXXX.','X...X','X...X','XXXX.','X.X..','X..X.','X...X'],
-  'S': [' XXXX','X....','X....',' XXX ','....X','....X','XXXX.'],
-  'T': ['XXXXX','..X..','..X..','..X..','..X..','..X..','..X..'],
-  'U': ['X...X','X...X','X...X','X...X','X...X','X...X',' XXX '],
-  'V': ['X...X','X...X','X...X','X...X','X...X','.X.X.','..X..'],
-  'W': ['X...X','X...X','X...X','X...X','X.X.X','XX.XX','X...X'],
-  'X': ['X...X','X...X','.X.X.','..X..','.X.X.','X...X','X...X'],
-  'Y': ['X...X','X...X','X...X','.X.X.','..X..','..X..','..X..'],
-  'Z': ['XXXXX','....X','...X.','..X..','.X...','X....','XXXXX'],
-
-  // ----- Lowercase a-z (x-height ~5 hàng dưới, hàng 0-1 trống cho ascender) -----
-  'a': ['.....','.....',' XXX.','....X',' XXXX','X...X',' XXXX'],
-  'b': ['X....','X....','XXXX.','X...X','X...X','X...X','XXXX.'],
-  'c': ['.....','.....',' XXXX','X....','X....','X....',' XXXX'],
-  'd': ['....X','....X','.XXXX','X...X','X...X','X...X','.XXXX'],
-  'e': ['.....','.....',' XXX ','X...X','XXXXX','X....',' XXX '],
-  'f': ['..XX.','.X..X','.X...','XXX..','.X...','.X...','.X...'],
-  'g': ['.....','.....',' XXXX','X...X',' XXXX','....X','XXXX.'],
-  'h': ['X....','X....','XXXX.','X...X','X...X','X...X','X...X'],
-  'i': ['..X..','.....','.XX..','..X..','..X..','..X..','.XXX.'],
-  'j': ['...X.','.....','..XX.','...X.','...X.','...X.','XXX..'],
-  'k': ['X....','X....','X..X.','X.X..','XX...','X.X..','X..X.'],
-  'l': ['.XX..','..X..','..X..','..X..','..X..','..X..','.XXX.'],
-  'm': ['.....','.....','XX.X.','X.X.X','X.X.X','X.X.X','X.X.X'],
-  'n': ['.....','.....','XXXX.','X...X','X...X','X...X','X...X'],
-  'o': ['.....','.....',' XXX ','X...X','X...X','X...X',' XXX '],
-  'p': ['.....','.....','XXXX.','X...X','XXXX.','X....','X....'],
-  'q': ['.....','.....','.XXXX','X...X','.XXXX','....X','....X'],
-  'r': ['.....','.....','X.XX.','XX..X','X....','X....','X....'],
-  's': ['.....','.....',' XXXX','X....',' XXX ','....X','XXXX.'],
-  't': ['.X...','.X...','XXX..','.X...','.X...','.X...','..XXX'],
-  'u': ['.....','.....','X...X','X...X','X...X','X...X',' XXXX'],
-  'v': ['.....','.....','X...X','X...X','X...X','.X.X.','..X..'],
-  'w': ['.....','.....','X...X','X...X','X.X.X','X.X.X','.X.X.'],
-  'x': ['.....','.....','X...X','.X.X.','..X..','.X.X.','X...X'],
-  'y': ['.....','.....','X...X','X...X',' XXXX','....X','XXXX.'],
-  'z': ['.....','.....','XXXXX','...X.','..X..','.X...','XXXXX'],
-
-  // ----- Vietnamese chars cần cho user defaults -----
-  // ả = a + hook above (móc trên)
-  'ả': ['..X..','..X..',' XXX.','....X',' XXXX','X...X',' XXXX'],
-  // ẫ = a + circumflex + tilde
-  'ẫ': ['.X.X.','..X..',' XXX.','....X',' XXXX','X...X',' XXXX'],
-  // ấ = a + circumflex + acute
-  'ấ': ['..X..','.XX..',' XXX.','....X',' XXXX','X...X',' XXXX'],
-  // ầ = a + circumflex + grave
-  'ầ': ['..X..','.XX..',' XXX.','....X',' XXXX','X...X',' XXXX'],
-  // ậ = a + circumflex + dot below
-  'ậ': ['..X..','.X.X.',' XXX.','....X',' XXXX','X...X','..X..'],
-  // à
-  'à': ['.X...','..X..',' XXX.','....X',' XXXX','X...X',' XXXX'],
-  // á
-  'á': ['...X.','..X..',' XXX.','....X',' XXXX','X...X',' XXXX'],
-  // ã
-  'ã': ['.X.X.','X.X.X',' XXX.','....X',' XXXX','X...X',' XXXX'],
-  // ạ
-  'ạ': ['.....','.....',' XXX.','....X',' XXXX','X...X','..X..'],
-  // ă (a + breve)
-  'ă': ['.....','X...X',' XXX.','....X',' XXXX','X...X',' XXXX'],
-  // â (a + circumflex only)
-  'â': ['..X..','.X.X.',' XXX.','....X',' XXXX','X...X',' XXXX'],
-
-  // o variants
-  'ô': ['..X..','.X.X.','.....',' XXX ','X...X','X...X',' XXX '],
-  'ơ': ['.....','...X.',' XXXX','X..XX','X...X','X...X',' XXX '],
-  'ò': ['.X...','..X..','.....',' XXX ','X...X','X...X',' XXX '],
-  'ó': ['...X.','..X..','.....',' XXX ','X...X','X...X',' XXX '],
-  'ỏ': ['..X..','..X..','.....',' XXX ','X...X','X...X',' XXX '],
-  'õ': ['.X.X.','X.X.X','.....',' XXX ','X...X','X...X',' XXX '],
-  'ọ': ['.....','.....',' XXX ','X...X','X...X','X...X','..X..'],
-
-  // e variants
-  'ê': ['..X..','.X.X.','.....',' XXX ','X...X','XXXXX',' XXX '],
-  'è': ['.X...','..X..','.....',' XXX ','X...X','XXXXX',' XXX '],
-  'é': ['...X.','..X..','.....',' XXX ','X...X','XXXXX',' XXX '],
-  'ẻ': ['..X..','..X..','.....',' XXX ','X...X','XXXXX',' XXX '],
-
-  // i variants
-  'ì': ['.X...','..X..','.....','.XX..','..X..','..X..','.XXX.'],
-  'í': ['...X.','..X..','.....','.XX..','..X..','..X..','.XXX.'],
-
-  // u variants
-  'ư': ['.....','...XX','X...X','X...X','X...X','X...X',' XXXX'],
-  'ú': ['...X.','..X..','X...X','X...X','X...X','X...X',' XXXX'],
-  'ù': ['.X...','..X..','X...X','X...X','X...X','X...X',' XXXX'],
-
-  // y variants
-  'ý': ['...X.','..X..','X...X','X...X',' XXXX','....X','XXXX.'],
-
-  // Đ đ
-  'Đ': ['XXXX.','X...X','X...X','XXX.X','X...X','X...X','XXXX.'],
-  'đ': ['....X','..XXX','....X','.XXXX','X...X','X...X','.XXXX'],
-
-  // Uppercase Vietnamese (rough — mostly user uses ASCII uppercase)
-  'Ả': ['..X..',' XXX.','X...X','X...X','XXXXX','X...X','X...X'],
-  'Ẫ': ['.X.X.','..X..','X...X','XXXXX','X...X','X...X','X...X'],
-  'Â': ['..X..','.X.X.',' XXX ','X...X','XXXXX','X...X','X...X'],
-  'Ă': ['X...X',' XXX ','X...X','XXXXX','X...X','X...X','X...X'],
-  'Ê': ['..X..','XXXXX','X....','XXXX.','X....','X....','XXXXX'],
-  'Ô': ['..X..','.X.X.',' XXX ','X...X','X...X','X...X',' XXX '],
-  'Ơ': ['...XX',' XXXX','X..XX','X...X','X...X','X...X',' XXX '],
-  'Ư': ['...XX','X...X','X...X','X...X','X...X','X...X',' XXXX']
-  }
-};
-
-// Map 5 nấc cỡ chữ → font + scale.
-// Nấc 1-3 (mới): font 3×5 với các scale 1,2,3 → 5,10,15 cells tall (nhỏ hơn).
-// Wait không, đảo lại: 1=3×5×1 (smallest 5h), 2=5×7×1 (7h, giữ), 3=3×5×2 (10h),
-// 4=5×7×2 (14h, giữ), 5=3×5×3 (15h).
-const LEVEL_TO_FONT = {
-  1: { font: FONT_3x5, scale: 1 },  //  5 cells tall — micro (font 3×5)
-  2: { font: FONT_5x7, scale: 1 },  //  7 cells tall — small (font 5×7, was old level 1)
-  3: { font: FONT_3x5, scale: 2 },  // 10 cells tall — med-small (font 3×5 × 2)
-  4: { font: FONT_5x7, scale: 2 },  // 14 cells tall — medium (font 5×7 × 2, was old level 2)
-  5: { font: FONT_3x5, scale: 3 }   // 15 cells tall — med-large (font 3×5 × 3)
-};
-
-// Lấy glyph cho 1 ký tự — thử char gốc, uppercase, NFD base, '?'.
-function getBitmapGlyph(font, ch) {
-  if (font.chars[ch]) return font.chars[ch];
-  const upper = ch.toUpperCase();
-  if (font.chars[upper]) return font.chars[upper];
-  // NFD decompose: bỏ diacritic, lấy ký tự base
-  const nfd = ch.normalize('NFD');
-  const base = nfd[0];
-  if (font.chars[base]) return font.chars[base];
-  const baseUpper = base.toUpperCase();
-  if (font.chars[baseUpper]) return font.chars[baseUpper];
-  return font.chars['?'] || font.chars[' '] || null;
-}
-
-// Render 1 dòng text bitmap vào data (lưới LED), tự căn giữa ngang
-function renderBitmapLine(text, yCenter, color, font, scale, spacing, data, rows, cols) {
-  const charWPx = font.W * scale;
-  const spaceWPx = spacing * scale;
-  const totalW = text.length * charWPx + Math.max(0, text.length - 1) * spaceWPx;
-  const startX = Math.floor((cols - totalW) / 2);
-  const startY = Math.round(yCenter - (font.H * scale) / 2);
-
-  let cursorX = startX;
-  for (let ci = 0; ci < text.length; ci++) {
-    const glyph = getBitmapGlyph(font, text[ci]);
-    if (!glyph) { cursorX += charWPx + spaceWPx; continue; }
-    for (let dy = 0; dy < font.H; dy++) {
-      const row = glyph[dy] || '';
-      for (let dx = 0; dx < font.W; dx++) {
-        if (row[dx] !== 'X') continue;
-        for (let sy = 0; sy < scale; sy++) {
-          for (let sx = 0; sx < scale; sx++) {
-            const r = startY + dy * scale + sy;
-            const c = cursorX + dx * scale + sx;
-            if (r >= 0 && r < rows && c >= 0 && c < cols && !data[r][c]) {
-              data[r][c] = { color };
-            }
-          }
-        }
-      }
-    }
-    cursorX += charWPx + spaceWPx;
-  }
-}
-
-// Tính bề ngang text ở font + scale + spacing cho trước (đơn vị: LED cells)
-function textWidthCells(text, font, scale, spacing) {
-  if (text.length === 0) return 0;
-  return text.length * font.W * scale + Math.max(0, text.length - 1) * spacing * scale;
-}
-
-// Wrap text thành nhiều physical lines, break tại space.
-function wrapTextToFit(text, font, scale, spacing, maxW) {
-  const words = text.split(' ');
-  const lines = [];
-  let current = '';
-  for (const word of words) {
-    if (!word) continue;
-    const candidate = current ? current + ' ' + word : word;
-    if (textWidthCells(candidate, font, scale, spacing) <= maxW) {
-      current = candidate;
-    } else {
-      if (current) lines.push(current);
-      current = word;
-    }
-  }
-  if (current) lines.push(current);
-  return lines.length > 0 ? lines : [text];
-}
-
-// TÔN TRỌNG TUYỆT ĐỐI nấc cỡ chữ user chọn. KHÔNG tự auto-shrink scale/font.
-// Text quá dài → wrap nhiều dòng. Word đơn quá dài → chấp nhận clip ngang.
-function fitAndWrap(text, level, cols) {
-  const cfg = LEVEL_TO_FONT[level] || LEVEL_TO_FONT[2];
-  const { font, scale } = cfg;
-  const w1 = wrapTextToFit(text, font, scale, 1, cols);
-  const w0 = wrapTextToFit(text, font, scale, 0, cols);
-  if (w0.length < w1.length) return { font, scale, spacing: 0, lines: w0 };
-  return { font, scale, spacing: 1, lines: w1 };
-}
-
-// Render text với wrap — nhiều physical lines stacked, căn giữa quanh yCenter
-function renderBitmapWrapped(text, yCenter, color, fit, data, rows, cols) {
-  const { font, scale, spacing, lines: wrapped } = fit;
-  const N = wrapped.length;
-  const lineH = font.H * scale;
-  const lineGap = scale; // 1 cell gap (scaled)
-  const totalH = N * lineH + Math.max(0, N - 1) * lineGap;
-  const yTop = yCenter - totalH / 2;
-  for (let i = 0; i < N; i++) {
-    const lineY = yTop + lineH / 2 + i * (lineH + lineGap);
-    renderBitmapLine(wrapped[i], lineY, color, font, scale, spacing, data, rows, cols);
-  }
-}
-
 
 const EFFECTS = [
   { id: 'static',       name: 'Tĩnh' },
@@ -1353,7 +1140,289 @@ function initUI() {
   // Gallery
   buildGallery();
 
+  // AI helper
+  initAIHelper();
+
+  // Quote modal
+  initQuoteForm();
+
   syncUIFromState();
+}
+
+// ---------- AI Helper ----------
+function initAIHelper() {
+  const input = $('#ai-input');
+  const btn = $('#ai-generate-btn');
+  const label = $('#ai-btn-label');
+  const spinner = $('#ai-spinner');
+  const resultBox = $('#ai-result');
+  const errorBox = $('#ai-error');
+
+  if (!btn || !input) return;
+
+  // Example chips → fill textarea + auto-submit
+  $$('.ai-example').forEach(b => {
+    b.addEventListener('click', () => {
+      input.value = b.dataset.text;
+      generate();
+    });
+  });
+
+  btn.addEventListener('click', generate);
+
+  input.addEventListener('keydown', (e) => {
+    if ((e.metaKey || e.ctrlKey) && e.key === 'Enter') {
+      e.preventDefault();
+      generate();
+    }
+  });
+
+  async function generate() {
+    const description = (input.value || '').trim();
+    if (description.length < 3) {
+      showError('Vui lòng mô tả cửa hàng/dịch vụ của bạn (ít nhất 3 ký tự).');
+      input.focus();
+      return;
+    }
+
+    setLoading(true);
+    hideResult();
+    hideError();
+
+    try {
+      const res = await fetch('/api/generate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ description }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        showError(data?.error || `Lỗi (${res.status}). Vui lòng thử lại.`);
+        return;
+      }
+
+      if (!data.design) {
+        showError('AI không trả về kết quả hợp lệ. Thử lại nhé.');
+        return;
+      }
+
+      applyDesign(data.design);
+
+      const reasoning = data.reasoning || 'Đã áp dụng thiết kế AI gợi ý — bạn có thể tinh chỉnh thêm bên dưới.';
+      showResult(`<strong class="text-yellow-300">✨ AI gợi ý:</strong> ${escapeHTML(reasoning)}`);
+
+      // Smooth scroll to preview so user sees the result immediately
+      const preview = $('#canvas-wrap');
+      if (preview) preview.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    } catch (err) {
+      console.error(err);
+      showError('Không kết nối được tới máy chủ AI. Kiểm tra mạng và thử lại.');
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  function applyDesign(d) {
+    // Merge AI-generated config into state (only known keys)
+    const allowed = [
+      'size','orientation',
+      'line1','line1On','line1Size','line1Color',
+      'line2','line2On','line2Size','line2Color',
+      'line3','line3On','line3Size','line3Color',
+      'bgColor','font','effect','showBorder','borderColor'
+    ];
+    allowed.forEach(k => { if (k in d) state[k] = d[k]; });
+
+    syncUIFromState();
+    maskCacheKey = '';
+    refresh();
+  }
+
+  function setLoading(on) {
+    btn.disabled = on;
+    spinner.classList.toggle('hidden', !on);
+    label.textContent = on ? 'Đang thiết kế...' : '✨ AI thiết kế giúp tôi';
+  }
+
+  function showResult(html) {
+    resultBox.innerHTML = html;
+    resultBox.classList.remove('hidden');
+  }
+  function hideResult() {
+    resultBox.classList.add('hidden');
+    resultBox.innerHTML = '';
+  }
+  function showError(msg) {
+    errorBox.textContent = msg;
+    errorBox.classList.remove('hidden');
+  }
+  function hideError() {
+    errorBox.classList.add('hidden');
+    errorBox.textContent = '';
+  }
+  function escapeHTML(s) {
+    return String(s).replace(/[&<>"']/g, c => ({
+      '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+    }[c]));
+  }
+}
+
+// ---------- Quote Form (modal) ----------
+function initQuoteForm() {
+  const modal = $('#quote-modal');
+  const openBtn = $('#quote-btn');
+  const closeBtn = $('#quote-modal-close');
+  const cancelBtn = $('#quote-cancel');
+  const form = $('#quote-form');
+  const submitBtn = $('#quote-submit');
+  const submitLabel = $('#quote-submit-label');
+  const spinner = $('#quote-spinner');
+  const errorBox = $('#quote-error');
+  const successBox = $('#quote-success');
+  const summaryEl = $('#quote-design-summary');
+
+  if (!modal || !openBtn) return;
+
+  const escapeQuoteHTML = (s) =>
+    String(s).replace(/[&<>"']/g, c => ({
+      '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+    }[c]));
+
+  function describeDesign() {
+    const dims = SIZES[state.size];
+    const sizeLabel = dims ? dims.label : state.size;
+    const orient = state.orientation === 'landscape' ? 'ngang' : 'dọc';
+    const parts = [];
+    if (state.line1On && state.line1) parts.push(`<strong class="text-white">${escapeQuoteHTML(state.line1)}</strong>`);
+    if (state.line2On && state.line2) parts.push(escapeQuoteHTML(state.line2));
+    if (state.line3On && state.line3) parts.push(escapeQuoteHTML(state.line3));
+    const fontName = (FONTS.find(f => f.id === state.font) || {}).name || state.font;
+    const effectName = (EFFECTS.find(e => e.id === state.effect) || {}).name || state.effect;
+    const bulbs = $('#info-led-count')?.textContent || '';
+    return `
+      <div>📐 ${escapeQuoteHTML(sizeLabel)} (${orient})</div>
+      <div class="mt-0.5">📝 ${parts.join(' / ') || '<span class="text-slate-500">(không có chữ)</span>'}</div>
+      <div class="mt-0.5">🎨 font <em class="text-slate-300 not-italic">${escapeQuoteHTML(fontName)}</em> · hiệu ứng <em class="text-slate-300 not-italic">${escapeQuoteHTML(effectName)}</em>${bulbs ? ` · ${escapeQuoteHTML(bulbs)} bóng LED` : ''}</div>
+    `;
+  }
+
+  function openModal(e) {
+    if (e) e.preventDefault();
+    summaryEl.innerHTML = describeDesign();
+    errorBox.classList.add('hidden');
+    successBox.classList.add('hidden');
+    modal.classList.remove('hidden');
+    modal.classList.add('flex');
+    document.body.style.overflow = 'hidden';
+    setTimeout(() => form.querySelector('[name="name"]')?.focus(), 100);
+  }
+
+  function closeModal() {
+    modal.classList.add('hidden');
+    modal.classList.remove('flex');
+    document.body.style.overflow = '';
+  }
+
+  openBtn.addEventListener('click', openModal);
+  closeBtn.addEventListener('click', closeModal);
+  cancelBtn.addEventListener('click', closeModal);
+  modal.addEventListener('click', (e) => { if (e.target === modal) closeModal(); });
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && !modal.classList.contains('hidden')) closeModal();
+  });
+
+  function setLoading(on) {
+    submitBtn.disabled = on;
+    spinner.classList.toggle('hidden', !on);
+    submitLabel.textContent = on ? 'Đang gửi...' : '📨 Gửi yêu cầu báo giá';
+  }
+
+  function showError(msg) {
+    successBox.classList.add('hidden');
+    errorBox.textContent = msg;
+    errorBox.classList.remove('hidden');
+  }
+
+  function showSuccess(html) {
+    errorBox.classList.add('hidden');
+    successBox.innerHTML = html;
+    successBox.classList.remove('hidden');
+  }
+
+  // Capture canvas as PNG — temporarily force static effect để snapshot không vào frame "off" của blink
+  function captureCanvas() {
+    const canvas = $('#board-canvas');
+    if (!canvas) return '';
+    const prevEffect = state.effect;
+    try {
+      state.effect = 'static';
+      render();
+      return canvas.toDataURL('image/png');
+    } catch (err) {
+      return '';
+    } finally {
+      state.effect = prevEffect;
+      startAnim();
+    }
+  }
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const fd = new FormData(form);
+    const customer = {
+      name: (fd.get('name') || '').toString().trim(),
+      phone: (fd.get('phone') || '').toString().trim(),
+      email: (fd.get('email') || '').toString().trim(),
+      address: (fd.get('address') || '').toString().trim(),
+      note: (fd.get('note') || '').toString().trim(),
+    };
+
+    if (customer.name.length < 2) return showError('Vui lòng nhập họ tên (tối thiểu 2 ký tự).');
+    if (!/^[\d\s+().\-]{8,20}$/.test(customer.phone)) return showError('Số điện thoại không hợp lệ.');
+    if (customer.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(customer.email)) {
+      return showError('Email không hợp lệ.');
+    }
+
+    setLoading(true);
+    errorBox.classList.add('hidden');
+
+    const imageBase64 = captureCanvas();
+    const bulbEstimate = $('#info-led-count')?.textContent || '';
+
+    const payload = {
+      customer,
+      design: { ...state },
+      imageBase64,
+      bulbEstimate,
+    };
+
+    try {
+      const res = await fetch('/api/quote', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      });
+      const data = await res.json().catch(() => ({}));
+
+      if (!res.ok) {
+        return showError(data?.error || `Lỗi (${res.status}). Vui lòng thử lại.`);
+      }
+
+      showSuccess(`
+        <div class="font-bold text-emerald-300 mb-1">✅ Đã gửi yêu cầu báo giá thành công!</div>
+        <div>Cảm ơn <strong>${escapeQuoteHTML(customer.name)}</strong>. SEONGON SG sẽ phản hồi qua điện thoại/email trong vòng 2 giờ làm việc.</div>
+      `);
+      form.reset();
+    } catch (err) {
+      console.error(err);
+      showError('Không kết nối được tới máy chủ. Kiểm tra mạng và thử lại.');
+    } finally {
+      setLoading(false);
+    }
+  });
 }
 
 function syncUIFromState() {
@@ -1437,265 +1506,187 @@ function syncUIFromState() {
 let maskCache = null;
 let maskCacheKey = '';
 
+// Text giờ render trực tiếp bằng canvas font + glow (xem drawGlowingText).
+// computeMask chỉ cần trả về lưới rỗng — render loop vẫn dùng `data` để biết
+// vị trí nào có content LED (giờ luôn null → không vẽ), border vẫn vẽ bình thường.
 function getMaskKey() {
-  return JSON.stringify({
-    s: state.size,
-    o: state.orientation,
-    f: state.font,
-    a: [state.line1, state.line1On, state.line1Size, state.line1Color],
-    b: [state.line2, state.line2On, state.line2Size, state.line2Color],
-    c: [state.line3, state.line3On, state.line3Size, state.line3Color]
-  });
+  return `${state.size}|${state.orientation}`;
 }
 
 function computeMask() {
   const key = getMaskKey();
   if (key === maskCacheKey && maskCache) return maskCache;
-
   const { cols, rows } = getBoardDims();
   const data = Array.from({ length: rows }, () => Array(cols).fill(null));
-
-  // Build lines (level = nấc 1-5 do user chọn)
-  const lines = [];
-  if (state.line1On && state.line1.trim()) lines.push({ text: state.line1.trim(), color: state.line1Color, level: state.line1Size });
-  if (state.line2On && state.line2.trim()) lines.push({ text: state.line2.trim(), color: state.line2Color, level: state.line2Size });
-  if (state.line3On && state.line3.trim()) lines.push({ text: state.line3.trim(), color: state.line3Color, level: state.line3Size });
-
-  if (lines.length === 0) {
-    maskCache = { cols, rows, data };
-    maskCacheKey = key;
-    return maskCache;
-  }
-
-  // Mode + fit cho từng dòng. Outline mode đã tắt — single mode dùng bitmap cho mọi nấc.
-  for (const line of lines) {
-    line.useOutline = false;
-    line.fit = fitAndWrap(line.text, line.level, cols);
-    const N = line.fit.lines.length;
-    line.height = N * line.fit.font.H * line.fit.scale + Math.max(0, N - 1) * line.fit.scale;
-  }
-
-  // Phân bổ dọc: gap đều giữa các dòng, dựa trên chiều cao thực tế
-  const totalContentHeight = lines.reduce((s, l) => s + l.height, 0);
-  const numGaps = lines.length + 1;
-  const gapPx = Math.max(1, (rows - totalContentHeight) / numGaps);
-
-  let yCursor = gapPx;
-  for (const line of lines) {
-    line.yCenterCells = yCursor + line.height / 2;
-    yCursor += line.height + gapPx;
-  }
-
-  // ============================================================================
-  // SINGLE MODE: BITMAP FONT — vẽ trực tiếp từng pixel của font 5×7 vào lưới LED
-  // Không qua Canvas, không AA, không hinting. Mỗi pixel "X" = 1 bóng LED.
-  // Scale = nấc do user chọn → tăng nấc thì mỗi pixel font thành ô scale×scale LED
-  // → tổng số bóng LED tăng theo scale².
-  // ============================================================================
-  for (const line of lines) {
-    if (line.useOutline) continue;
-    renderBitmapWrapped(line.text, line.yCenterCells, line.color, line.fit, data, rows, cols);
-  }
-
-  // ============================================================================
-  // OUTLINE MODE: Canvas + edge detection — chỉ dùng cho L size + bảng 60×80
-  // ============================================================================
-  const outlineLines = lines.filter(l => l.useOutline);
-  if (outlineLines.length > 0) {
-    const HIRES = 4;
-    const w = cols * HIRES, h = rows * HIRES;
-    const font = FONTS.find(f => f.id === state.font);
-
-    const off = document.createElement('canvas');
-    off.width = w; off.height = h;
-    const ctx = off.getContext('2d');
-
-    for (const line of outlineLines) {
-      // fontPx tỉ lệ với chiều cao bitmap để outline mode trông to tương đương single mode cùng nấc
-      let fontPx = line.height * HIRES * font.scale;
-      ctx.font = `${font.wOutline} ${fontPx}px "${font.family}", system-ui, sans-serif`;
-
-      const maxW = w * 0.92;
-      let measured = ctx.measureText(line.text);
-      if (measured.width > maxW) {
-        fontPx *= maxW / measured.width;
-        ctx.font = `${font.wOutline} ${fontPx}px "${font.family}", system-ui, sans-serif`;
-      }
-
-      ctx.fillStyle = line.color;
-      ctx.textAlign = 'center';
-      ctx.textBaseline = 'middle';
-      ctx.fillText(line.text, w / 2, line.yCenterCells * HIRES);
-    }
-
-    const img = ctx.getImageData(0, 0, w, h).data;
-    const ALPHA_ON = 96;
-    const edges = new Uint8Array(w * h);
-    for (let y = 1; y < h - 1; y++) {
-      for (let x = 1; x < w - 1; x++) {
-        const i = (y * w + x) * 4;
-        if (img[i + 3] < ALPHA_ON) continue;
-        const aN = img[((y - 1) * w + x) * 4 + 3];
-        const aS = img[((y + 1) * w + x) * 4 + 3];
-        const aE = img[(y * w + (x + 1)) * 4 + 3];
-        const aW = img[(y * w + (x - 1)) * 4 + 3];
-        if (aN < ALPHA_ON || aS < ALPHA_ON || aE < ALPHA_ON || aW < ALPHA_ON) {
-          edges[y * w + x] = 1;
-        }
-      }
-    }
-
-    const MIN_EDGE_PX = 3;
-    for (let r = 0; r < rows; r++) {
-      for (let c = 0; c < cols; c++) {
-        if (data[r][c]) continue;
-        let R = 0, G = 0, B = 0, count = 0;
-        for (let dy = 0; dy < HIRES; dy++) {
-          for (let dx = 0; dx < HIRES; dx++) {
-            const x = c * HIRES + dx;
-            const y = r * HIRES + dy;
-            if (edges[y * w + x]) {
-              const i = (y * w + x) * 4;
-              R += img[i]; G += img[i + 1]; B += img[i + 2];
-              count++;
-            }
-          }
-        }
-        if (count >= MIN_EDGE_PX) {
-          data[r][c] = { color: `rgb(${Math.round(R/count)}, ${Math.round(G/count)}, ${Math.round(B/count)})` };
-        }
-      }
-    }
-  }
-
   maskCache = { cols, rows, data };
   maskCacheKey = key;
   return maskCache;
 }
 
-function fillStrokeGaps(data, rows, cols) {
-  const toFill = [];
-  for (let r = 1; r < rows - 1; r++) {
-    for (let c = 1; c < cols - 1; c++) {
-      if (data[r][c]) continue;
+// Cỡ chữ theo nấc 1-5 → tỉ lệ so với chiều cao bảng
+const LEVEL_TO_HEIGHT_RATIO = {
+  1: 0.07,
+  2: 0.10,
+  3: 0.15,
+  4: 0.20,
+  5: 0.27
+};
 
-      // Đếm tổng số láng giềng "on" — nếu ≥ 5 thì đây là center của vùng kín (vd: hollow giữa
-      // chữ "O") → KHÔNG fill, tránh lấp mất hollow.
-      let onCount = 0;
-      for (let dr = -1; dr <= 1; dr++) {
-        for (let dc = -1; dc <= 1; dc++) {
-          if (dr === 0 && dc === 0) continue;
-          if (data[r + dr][c + dc]) onCount++;
-        }
-      }
-      if (onCount >= 5) continue;
-
-      // Check 4 trục đối xứng — nếu cả 2 cell đối nhau đều sáng → bridge "đứt 1 cell"
-      const pairs = [
-        [data[r][c - 1],     data[r][c + 1]],      // ngang
-        [data[r - 1][c],     data[r + 1][c]],      // dọc
-        [data[r - 1][c - 1], data[r + 1][c + 1]],  // chéo \
-        [data[r - 1][c + 1], data[r + 1][c - 1]]   // chéo /
-      ];
-      for (const [a, b] of pairs) {
-        if (a && b) {
-          const ca = parseRGB(a.color), cb = parseRGB(b.color);
-          const color = `rgb(${Math.round((ca[0]+cb[0])/2)}, ${Math.round((ca[1]+cb[1])/2)}, ${Math.round((ca[2]+cb[2])/2)})`;
-          toFill.push({ r, c, color });
-          break;
-        }
-      }
-    }
+function lightenColor(input, amount) {
+  let r, g, b;
+  if (typeof input === 'string' && input.startsWith('#')) {
+    r = parseInt(input.slice(1,3),16);
+    g = parseInt(input.slice(3,5),16);
+    b = parseInt(input.slice(5,7),16);
+  } else {
+    const m = (input || '').match(/\d+/g);
+    if (!m) return input;
+    [r, g, b] = m.map(Number);
   }
-  for (const f of toFill) data[f.r][f.c] = { color: f.color };
+  r = Math.min(255, r + (255 - r) * amount);
+  g = Math.min(255, g + (255 - g) * amount);
+  b = Math.min(255, b + (255 - b) * amount);
+  return `rgb(${Math.round(r)}, ${Math.round(g)}, ${Math.round(b)})`;
 }
 
-function parseRGB(rgbStr) {
-  const m = rgbStr.match(/\d+/g);
-  return m ? [parseInt(m[0]), parseInt(m[1]), parseInt(m[2])] : [255, 255, 255];
+// Word-wrap text vào nhiều dòng ở fontPx cho trước. Trả về mảng các subline.
+// Nếu 1 word đơn quá rộng → trả về [text] nguyên (caller sẽ shrink).
+function wrapTextAtSize(ctx, text, fontStr, maxW) {
+  ctx.font = fontStr;
+  if (ctx.measureText(text).width <= maxW) return [text];
+  const words = text.split(/\s+/).filter(Boolean);
+  if (words.length <= 1) return [text];
+  const out = [];
+  let current = '';
+  for (const word of words) {
+    const candidate = current ? current + ' ' + word : word;
+    if (ctx.measureText(candidate).width <= maxW) {
+      current = candidate;
+    } else {
+      if (current) out.push(current);
+      current = word;
+    }
+  }
+  if (current) out.push(current);
+  return out.length > 0 ? out : [text];
 }
 
-// ============================================================================
-// Zhang-Suen Thinning Algorithm
-// Lấy hình chữ đầy → gọt từng lớp pixel viền → chỉ còn lại "xương" 1 pixel
-// (giữ nguyên topology: O vẫn rỗng, A vẫn có khoảng giữa, 8 vẫn 2 vòng v.v.)
-// Áp dụng trực tiếp trên lưới LED (rows × cols), nhanh và đảm bảo 1 LED bề ngang.
-// ============================================================================
-function skeletonizeMask(data, rows, cols) {
-  // Build binary representation
-  const bin = new Uint8Array(rows * cols);
-  for (let r = 0; r < rows; r++) {
-    for (let c = 0; c < cols; c++) {
-      if (data[r][c]) bin[r * cols + c] = 1;
+// Vẽ chữ phát quang trực tiếp lên canvas — font thật, glow đa lớp, mượt và rực rỡ.
+// Chữ quá dài → tự xuống dòng (wrap) thay vì shrink. Block chữ căn giữa cả X và Y.
+function drawGlowingText(ctx, displayW, displayH) {
+  const font = FONTS.find(f => f.id === state.font) || FONTS[0];
+  const items = [];
+  if (state.line1On && state.line1.trim()) items.push({ text: state.line1.trim(), color: state.line1Color, level: state.line1Size });
+  if (state.line2On && state.line2.trim()) items.push({ text: state.line2.trim(), color: state.line2Color, level: state.line2Size });
+  if (state.line3On && state.line3.trim()) items.push({ text: state.line3.trim(), color: state.line3Color, level: state.line3Size });
+  if (items.length === 0) return;
+
+  const padX = Math.max(displayW * 0.06, 12);
+  const padY = Math.max(displayH * 0.05, 12);
+  const maxLineW = displayW - 2 * padX;
+  const innerH = displayH - 2 * padY;
+
+  const fontWeight = font.wSingle || '700';
+  const fontScale = font.scale || 1;
+  const fontStr = (px) => `${fontWeight} ${px}px "${font.family}", system-ui, sans-serif`;
+
+  const SUBLINE_LH = 1.0;   // line-height giữa các subline của cùng 1 logical line
+  const ITEM_GAP_RATIO = 0.32; // gap giữa các logical line, tỉ lệ với font trung bình
+
+  // Pass 1: tính fontPx desired + wrap text. Chỉ shrink khi 1 word đơn quá rộng.
+  for (const item of items) {
+    let px = displayH * (LEVEL_TO_HEIGHT_RATIO[item.level] || 0.12) * fontScale;
+    let sublines = wrapTextAtSize(ctx, item.text, fontStr(px), maxLineW);
+
+    // Nếu 1 subline vẫn vượt maxLineW (single word too long) → shrink riêng line này
+    ctx.font = fontStr(px);
+    let widest = 0;
+    for (const s of sublines) widest = Math.max(widest, ctx.measureText(s).width);
+    if (widest > maxLineW) {
+      px *= maxLineW / widest;
+      sublines = wrapTextAtSize(ctx, item.text, fontStr(px), maxLineW);
     }
+
+    item.px = px;
+    item.sublines = sublines;
+    item.sublineH = px * SUBLINE_LH;
+    item.height = sublines.length * item.sublineH;
   }
 
-  const idx = (r, c) => r * cols + c;
-  let changed = true;
-  let safety = 0;
+  // Pass 2: nếu tổng chiều cao vượt board → shrink uniformly + re-wrap (1-2 iterations).
+  const computeContentH = () => {
+    const avgPx = items.reduce((s, i) => s + i.px, 0) / items.length;
+    const itemGap = avgPx * ITEM_GAP_RATIO;
+    const total = items.reduce((s, i) => s + i.height, 0) + Math.max(0, items.length - 1) * itemGap;
+    return { total, itemGap };
+  };
 
-  while (changed && safety < 30) {
-    changed = false;
-    safety++;
+  let { total: contentH, itemGap } = computeContentH();
+  let iter = 0;
+  while (contentH > innerH && iter < 3) {
+    const factor = innerH / contentH;
+    for (const item of items) {
+      item.px *= factor;
+      item.sublines = wrapTextAtSize(ctx, item.text, fontStr(item.px), maxLineW);
+      item.sublineH = item.px * SUBLINE_LH;
+      item.height = item.sublines.length * item.sublineH;
+    }
+    ({ total: contentH, itemGap } = computeContentH());
+    iter++;
+  }
 
-    // Hai sub-iteration trên mỗi vòng (chuẩn Zhang-Suen)
-    for (let step = 0; step < 2; step++) {
-      const toRemove = [];
+  // Căn giữa block toàn bộ chữ theo chiều dọc
+  let y = padY + (innerH - contentH) / 2;
 
-      for (let r = 1; r < rows - 1; r++) {
-        for (let c = 1; c < cols - 1; c++) {
-          if (bin[idx(r, c)] !== 1) continue;
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'top';
 
-          // 8 láng giềng theo chiều kim đồng hồ bắt đầu từ Bắc
-          const p2 = bin[idx(r - 1, c    )];
-          const p3 = bin[idx(r - 1, c + 1)];
-          const p4 = bin[idx(r,     c + 1)];
-          const p5 = bin[idx(r + 1, c + 1)];
-          const p6 = bin[idx(r + 1, c    )];
-          const p7 = bin[idx(r + 1, c - 1)];
-          const p8 = bin[idx(r,     c - 1)];
-          const p9 = bin[idx(r - 1, c - 1)];
+  const isNight = state.mode === 'night';
+  const blinkOn = state.effect === 'blink' ? Math.floor(animPhase / 25) % 2 === 0 : true;
+  const cx = displayW / 2;
 
-          // B = số láng giềng "on" (2 ≤ B ≤ 6 mới được xét xoá)
-          const B = p2 + p3 + p4 + p5 + p6 + p7 + p8 + p9;
-          if (B < 2 || B > 6) continue;
+  for (let i = 0; i < items.length; i++) {
+    const item = items[i];
+    let color = item.color;
+    if (state.effect === 'rainbow') color = hueShift(color, animPhase * 2);
 
-          // A = số lần chuyển 0→1 trong chuỗi P2..P9..P2 (phải đúng = 1)
-          let A = 0;
-          if (p2 === 0 && p3 === 1) A++;
-          if (p3 === 0 && p4 === 1) A++;
-          if (p4 === 0 && p5 === 1) A++;
-          if (p5 === 0 && p6 === 1) A++;
-          if (p6 === 0 && p7 === 1) A++;
-          if (p7 === 0 && p8 === 1) A++;
-          if (p8 === 0 && p9 === 1) A++;
-          if (p9 === 0 && p2 === 1) A++;
-          if (A !== 1) continue;
+    ctx.font = fontStr(item.px);
 
-          // Điều kiện riêng cho từng sub-iteration
-          if (step === 0) {
-            if (p2 && p4 && p6) continue;  // ít nhất 1 trong N/E/S phải = 0
-            if (p4 && p6 && p8) continue;  // ít nhất 1 trong E/S/W phải = 0
-          } else {
-            if (p2 && p4 && p8) continue;  // ít nhất 1 trong N/E/W phải = 0
-            if (p2 && p6 && p8) continue;  // ít nhất 1 trong N/S/W phải = 0
-          }
-
-          toRemove.push(idx(r, c));
+    let sy = y;
+    for (const subText of item.sublines) {
+      if (blinkOn) {
+        if (isNight) {
+          ctx.shadowColor = color;
+          ctx.shadowBlur = item.px * 0.65;
+          ctx.fillStyle = color;
+          ctx.fillText(subText, cx, sy);
+          ctx.shadowBlur = item.px * 0.30;
+          ctx.fillStyle = color;
+          ctx.fillText(subText, cx, sy);
+          ctx.shadowBlur = item.px * 0.10;
+          ctx.fillStyle = lightenColor(color, 0.55);
+          ctx.fillText(subText, cx, sy);
+        } else {
+          ctx.shadowColor = color;
+          ctx.shadowBlur = item.px * 0.18;
+          ctx.fillStyle = color;
+          ctx.fillText(subText, cx, sy);
+          ctx.shadowBlur = 0;
+          ctx.fillStyle = lightenColor(color, 0.25);
+          ctx.fillText(subText, cx, sy);
         }
+      } else {
+        ctx.shadowBlur = 0;
+        ctx.fillStyle = isNight ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.08)';
+        ctx.fillText(subText, cx, sy);
       }
-
-      for (let i = 0; i < toRemove.length; i++) bin[toRemove[i]] = 0;
-      if (toRemove.length > 0) changed = true;
+      sy += item.sublineH;
     }
+
+    y += item.height + itemGap;
   }
 
-  // Áp kết quả binary trở lại data — giữ màu của cell sống sót
-  for (let r = 0; r < rows; r++) {
-    for (let c = 0; c < cols; c++) {
-      if (bin[idx(r, c)] === 0) data[r][c] = null;
-    }
-  }
+  ctx.shadowBlur = 0;
 }
 
 // ---------- Sprite cache (pre-rendered glowing LEDs for speed) ----------
@@ -1795,8 +1786,11 @@ function render() {
     ctx.fillRect(0, 0, displayW, displayH);
   }
 
-  // Draw LEDs — chỉ vẽ TẠI vị trí thực sự có bóng (khoan lỗ + cắm bóng)
-  // Vị trí không thiết kế = không có lỗ = không vẽ gì (chỉ thấy nền Alu)
+  // Vẽ chữ phát quang (font thật, multi-layer glow) — đây là "trung tâm" của bảng
+  drawGlowingText(ctx, displayW, displayH);
+  ctx.shadowBlur = 0;
+
+  // Draw viền LED — chỉ chạy quanh perimeter của bảng
   const perimTotal = 2 * (rows + cols) - 4;
   const chasePos = (animPhase * 0.6) % perimTotal;
   const chaseWave = Math.max(3, Math.floor(perimTotal * 0.05));
@@ -1845,9 +1839,18 @@ function render() {
     }
   }
 
-  // Update bulb count display
+  // Ước lượng số bóng LED thực tế (cho mục đích báo giá, không phải số chấm trên canvas)
+  // Khớp với pricing copy: 40×60 ~2.400, 50×70 ~3.500, 60×80 ~4.800.
+  const APPROX_BULBS = { '40x60': 2400, '50x70': 3500, '60x80': 4800 };
+  const linesActive =
+    (state.line1On && state.line1.trim() ? 1 : 0) +
+    (state.line2On && state.line2.trim() ? 1 : 0) +
+    (state.line3On && state.line3.trim() ? 1 : 0);
+  let approxBulbs = APPROX_BULBS[state.size] * (0.55 + 0.15 * linesActive);
+  if (!state.showBorder) approxBulbs *= 0.82;
+  approxBulbs = Math.round(approxBulbs / 50) * 50;
   const ledCountEl = document.getElementById('info-led-count');
-  if (ledCountEl) ledCountEl.textContent = bulbCount.toLocaleString('vi-VN');
+  if (ledCountEl) ledCountEl.textContent = '~' + approxBulbs.toLocaleString('vi-VN');
 
   // Subtle frame around the board (Alu plate edge)
   ctx.strokeStyle = 'rgba(255,255,255,0.05)';
