@@ -11,6 +11,7 @@ Claude Study/
 ├── _notes/                  # Ghi chú học, kiến thức tích lũy
 ├── _research/               # Research các topic mới
 ├── _drafts/                 # Bản nháp ý tưởng, MVP thử nghiệm
+├── _transcript              # Export conversion
 ├── .mcp.json                # MCP: Lark (chỉ load khi mở Claude từ đây)
 ├── README.md
 └── .gitignore
