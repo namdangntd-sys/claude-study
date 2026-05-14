@@ -1,0 +1,29 @@
+# Secrets / credentials
+.mcp.json
+**/.env
+*.env
+
+# Build artifacts
+**/node_modules/
+**/.venv/
+**/__pycache__/
+**/*.pyc
+
+# Logs
+*.log
+lark-mcp/sync.log
+
+# Claude Code local
+.claude/
+.tools/
+
+# OS / IDE
+Thumbs.db
+.DS_Store
+.vscode/
+.idea/
+
+# Google OAuth tokens
+google_token.json
+google_credentials.json
+*credentials*.json

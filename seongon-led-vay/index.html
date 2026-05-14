@@ -1,0 +1,2089 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SEONGON SG — Bảng LED Vẫy 2 Mặt | Thiết kế trực tiếp, xem ngay kết quả</title>
+  <meta name="description" content="SEONGON SG — Thi công bảng LED vẫy 2 mặt cho cửa hàng. Tự thiết kế bảng hiệu của bạn ngay trên web, xem trước mô phỏng đúng tỷ lệ thật (LED 5mm, khoảng cách 10mm). Bảo hành 12 tháng." />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;800&family=Bebas+Neue&family=Dancing+Script:wght@400;700&family=Pixelify+Sans:wght@400;500;600;700&family=VT323&display=swap" rel="stylesheet" />
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              50:  '#fff1f1',
+              100: '#ffe1e1',
+              300: '#ff8e8e',
+              500: '#ef3b3b',
+              600: '#dc2424',
+              700: '#b81e1e',
+              900: '#5a0d0d'
+            }
+          },
+          fontFamily: {
+            sans:    ['Inter', 'system-ui', 'sans-serif'],
+            display: ['"Bebas Neue"', 'sans-serif'],
+            script:  ['"Dancing Script"', 'cursive']
+          }
+        }
+      }
+    };
+  </script>
+
+  <style>
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Inter', sans-serif; -webkit-font-smoothing: antialiased; }
+
+    .glow-text {
+      text-shadow:
+        0 0 12px rgba(239,59,59,.55),
+        0 0 30px rgba(239,59,59,.35);
+    }
+    .glow-yellow {
+      text-shadow:
+        0 0 10px rgba(255,210,0,.6),
+        0 0 28px rgba(255,210,0,.35);
+    }
+    .dot {
+      width: 8px; height: 8px; border-radius: 50%;
+      display: inline-block; box-shadow: 0 0 10px currentColor;
+    }
+    @keyframes pulse-soft { 0%,100% { opacity: .55; } 50% { opacity: 1; } }
+    .pulse-soft { animation: pulse-soft 1.6s ease-in-out infinite; }
+
+    /* LED grid backdrop */
+    .led-grid-bg {
+      background-image:
+        radial-gradient(circle, rgba(239,59,59,.18) 1px, transparent 1.4px);
+      background-size: 22px 22px;
+    }
+
+    /* Inputs */
+    .field {
+      background: #0b1220; border: 1px solid #1f2937;
+      color: #fff; border-radius: 10px;
+      padding: 10px 12px; width: 100%; font-size: 14px;
+      transition: border-color .15s;
+    }
+    .field:focus { outline: none; border-color: #ef3b3b; }
+
+    .chip {
+      padding: 6px 10px; border-radius: 999px;
+      font-size: 12px; font-weight: 600; cursor: pointer;
+      border: 1px solid #243042; background: #0b1220;
+      color: #cbd5e1; transition: all .15s;
+    }
+    .chip:hover { border-color: #3a4b66; color: #fff; }
+    .chip.active { background: #ef3b3b; border-color: #ef3b3b; color: #fff; }
+
+    .swatch {
+      width: 30px; height: 30px; border-radius: 8px; cursor: pointer;
+      border: 2px solid transparent; box-shadow: inset 0 0 0 1px rgba(255,255,255,.08);
+      transition: transform .15s, border-color .15s;
+    }
+    .swatch:hover { transform: scale(1.08); }
+    .swatch.active { border-color: #ef3b3b; transform: scale(1.1); }
+
+    .size-card {
+      cursor: pointer; transition: all .15s;
+      border: 2px solid #1f2937;
+    }
+    .size-card:hover { border-color: #334155; }
+    .size-card.active { border-color: #ef3b3b; background: rgba(239,59,59,.08); }
+
+    .step-num {
+      width: 30px; height: 30px; border-radius: 999px;
+      background: linear-gradient(135deg, #ef3b3b, #b81e1e);
+      display: inline-flex; align-items: center; justify-content: center;
+      font-weight: 800; font-size: 14px; color: #fff;
+    }
+
+    /* Sticky preview on desktop */
+    @media (min-width: 1024px) {
+      .preview-sticky { position: sticky; top: 88px; align-self: start; }
+    }
+
+    /* Faux LED hero board */
+    .hero-board {
+      background: #000;
+      border-radius: 16px;
+      padding: 22px 14px;
+      border: 6px solid #1a1a1a;
+      box-shadow:
+        0 0 60px rgba(239,59,59,.35),
+        inset 0 0 22px rgba(0,0,0,.8);
+      position: relative;
+    }
+    .hero-board::before, .hero-board::after {
+      content: ''; position: absolute; inset: 6px;
+      border-radius: 12px; pointer-events: none;
+      box-shadow: 0 0 0 2px rgba(239,59,59,.3);
+    }
+
+    /* FAQ */
+    details > summary { list-style: none; cursor: pointer; }
+    details > summary::-webkit-details-marker { display: none; }
+    details[open] .faq-icon { transform: rotate(45deg); }
+    .faq-icon { transition: transform .2s; }
+
+    /* Range */
+    input[type="range"] {
+      -webkit-appearance: none; appearance: none;
+      width: 100%; height: 4px; background: #1f2937;
+      border-radius: 4px; outline: none;
+    }
+    input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none; appearance: none;
+      width: 16px; height: 16px; background: #ef3b3b;
+      border-radius: 50%; cursor: pointer;
+    }
+    input[type="range"]::-moz-range-thumb {
+      width: 16px; height: 16px; background: #ef3b3b;
+      border-radius: 50%; cursor: pointer; border: none;
+    }
+
+    /* Reveal */
+    .reveal { opacity: 0; transform: translateY(18px); transition: all .55s ease; }
+    .reveal.in { opacity: 1; transform: none; }
+  </style>
+</head>
+
+<body class="bg-slate-950 text-slate-100">
+
+<!-- ============================================ NAV ============================================ -->
+<nav class="sticky top-0 z-50 bg-slate-950/85 backdrop-blur-md border-b border-slate-800/80">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
+    <a href="#" class="flex items-center gap-2.5">
+      <div class="w-9 h-9 rounded-lg bg-gradient-to-br from-brand-500 to-brand-700 flex items-center justify-center font-extrabold text-sm" style="box-shadow: 0 0 14px rgba(239,59,59,.45);">SG</div>
+      <div class="leading-tight">
+        <div class="font-extrabold tracking-wide">SEONGON SG</div>
+        <div class="text-[10px] text-slate-400 -mt-0.5 uppercase tracking-widest">Bảng LED vẫy</div>
+      </div>
+    </a>
+    <div class="hidden md:flex items-center gap-7 text-sm text-slate-300">
+      <a href="#designer" class="hover:text-white">Thiết kế</a>
+      <a href="#why" class="hover:text-white">Vì sao chọn</a>
+      <a href="#gallery" class="hover:text-white">Mẫu</a>
+      <a href="#pricing" class="hover:text-white">Bảng giá</a>
+      <a href="#process" class="hover:text-white">Quy trình</a>
+      <a href="#faq" class="hover:text-white">FAQ</a>
+    </div>
+    <a href="#contact" class="hidden sm:inline-flex items-center gap-2 bg-brand-500 hover:bg-brand-600 px-4 py-2 rounded-lg text-sm font-semibold transition">
+      <span class="dot text-yellow-300 pulse-soft" style="background:#fde047;"></span>
+      Tư vấn ngay
+    </a>
+  </div>
+</nav>
+
+<!-- ============================================ HERO ============================================ -->
+<section class="relative overflow-hidden">
+  <div class="absolute inset-0 led-grid-bg opacity-40 pointer-events-none"></div>
+  <div class="absolute inset-0 bg-gradient-to-b from-slate-950 via-slate-950/70 to-slate-950 pointer-events-none"></div>
+  <div class="absolute -top-32 -left-32 w-96 h-96 rounded-full bg-brand-500/20 blur-3xl pointer-events-none"></div>
+  <div class="absolute -bottom-32 -right-32 w-96 h-96 rounded-full bg-yellow-400/10 blur-3xl pointer-events-none"></div>
+
+  <div class="relative max-w-7xl mx-auto px-4 sm:px-6 pt-14 pb-20 md:pt-20 md:pb-28 grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+    <div class="reveal">
+      <div class="inline-flex items-center gap-2 bg-brand-500/10 border border-brand-500/30 px-3 py-1.5 rounded-full text-xs sm:text-sm text-brand-300 mb-6">
+        <span class="dot pulse-soft" style="background:#ef3b3b;color:#ef3b3b;"></span>
+        Bảng LED vẫy 2 mặt — Xưởng sản xuất trực tiếp
+      </div>
+      <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold leading-[1.05] tracking-tight mb-6">
+        Bảng LED <span class="text-brand-500 glow-text">vẫy</span> 2 mặt<br>
+        Hút khách từ <em class="text-yellow-300 not-italic glow-yellow">cả hai hướng</em> đường
+      </h1>
+      <p class="text-base sm:text-lg text-slate-300 leading-relaxed mb-8 max-w-xl">
+        Thiết kế bảng hiệu LED vẫy của riêng bạn ngay trên web — xem trước kết quả mô phỏng <strong class="text-white">đúng tỷ lệ thật</strong> (LED 5mm, khoảng cách 10mm) trước khi đặt sản xuất.
+      </p>
+      <div class="flex flex-wrap gap-3 mb-10">
+        <a href="#designer" class="group inline-flex items-center gap-2 bg-brand-500 hover:bg-brand-600 px-6 py-3.5 rounded-xl font-bold transition shadow-lg shadow-brand-500/30">
+          Tự thiết kế ngay
+          <svg class="w-4 h-4 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+        </a>
+        <a href="#pricing" class="inline-flex items-center gap-2 bg-slate-800/70 hover:bg-slate-800 px-6 py-3.5 rounded-xl font-semibold border border-slate-700 transition">
+          Xem bảng giá
+        </a>
+      </div>
+      <div class="grid grid-cols-3 gap-4 max-w-md">
+        <div>
+          <div class="text-2xl font-extrabold text-brand-300">12 tháng</div>
+          <div class="text-xs text-slate-400 mt-1">Bảo hành chính hãng</div>
+        </div>
+        <div>
+          <div class="text-2xl font-extrabold text-brand-300">~10 năm</div>
+          <div class="text-xs text-slate-400 mt-1">Tuổi thọ LED ngoài trời</div>
+        </div>
+        <div>
+          <div class="text-2xl font-extrabold text-brand-300">2 mặt</div>
+          <div class="text-xs text-slate-400 mt-1">Cả 2 chiều đường đều thấy</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Hero faux LED board -->
+    <div class="reveal relative mx-auto w-full max-w-md">
+      <div class="hero-board aspect-[4/5] flex flex-col items-center justify-center gap-5 text-center">
+        <div class="font-display text-5xl sm:text-6xl tracking-wider" style="color:#ff4040; text-shadow: 0 0 10px #ff4040, 0 0 24px #ff4040, 0 0 42px #ff2030;">
+          SEONGON
+        </div>
+        <div class="font-display text-3xl sm:text-4xl tracking-wide" style="color:#ffd200; text-shadow: 0 0 8px #ffd200, 0 0 22px #ffd200;">
+          SG
+        </div>
+        <div class="w-3/4 h-px bg-gradient-to-r from-transparent via-brand-500/60 to-transparent"></div>
+        <div class="font-display text-xl sm:text-2xl tracking-widest" style="color:#fff; text-shadow: 0 0 8px #fff, 0 0 16px #fff;">
+          BẢNG LED VẪY
+        </div>
+        <div class="text-xs sm:text-sm" style="color:#3eff5e; text-shadow: 0 0 6px #3eff5e;">
+          ★ HOTLINE: 0909 999 999 ★
+        </div>
+      </div>
+      <div class="absolute -bottom-3 -right-3 sm:-bottom-4 sm:-right-4 bg-yellow-400 text-slate-900 px-3 sm:px-4 py-1.5 sm:py-2 rounded-lg font-bold text-xs sm:text-sm rotate-3 shadow-lg">
+        Demo mô phỏng — bảng thật còn đẹp hơn!
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================ DESIGNER TOOL ============================================ -->
+<section id="designer" class="relative py-16 md:py-24 bg-gradient-to-b from-slate-900 to-slate-950">
+  <div class="absolute inset-0 led-grid-bg opacity-20 pointer-events-none"></div>
+
+  <div class="relative max-w-7xl mx-auto px-4 sm:px-6">
+    <div class="text-center max-w-3xl mx-auto mb-12">
+      <div class="inline-flex items-center gap-2 bg-yellow-400/10 text-yellow-300 px-4 py-1.5 rounded-full text-xs sm:text-sm font-semibold mb-4 border border-yellow-400/20">
+        ⚡ CÔNG CỤ THIẾT KẾ TRỰC TIẾP
+      </div>
+      <h2 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight mb-4">
+        Tự thiết kế bảng LED vẫy<br><span class="text-brand-500 glow-text">của riêng bạn</span>
+      </h2>
+      <p class="text-slate-400 leading-relaxed">
+        Chọn kích thước, nhập thông tin thương hiệu, chỉnh màu sắc — kết quả mô phỏng <strong class="text-white">đúng tỉ lệ thật</strong> (LED 5mm, khoảng cách 10mm tâm-tâm) hiện ra ngay.
+      </p>
+    </div>
+
+    <div class="grid lg:grid-cols-[1fr_540px] gap-8">
+      <!-- ============ Control Panel ============ -->
+      <div class="space-y-6">
+
+        <!-- Step 1: Size -->
+        <div class="bg-slate-950/70 border border-slate-800 rounded-2xl p-5 sm:p-6">
+          <div class="flex items-center gap-3 mb-4">
+            <span class="step-num">1</span>
+            <h3 class="text-lg font-bold">Chọn kích thước bảng</h3>
+          </div>
+
+          <!-- Orientation toggle -->
+          <div class="mb-3">
+            <div class="text-xs text-slate-400 mb-1.5">Hướng bảng:</div>
+            <div class="grid grid-cols-2 gap-2" id="orientation-options">
+              <button class="orientation-btn chip" data-value="portrait">⬇ Dọc</button>
+              <button class="orientation-btn chip" data-value="landscape">➡ Ngang</button>
+            </div>
+          </div>
+
+          <div id="size-options" class="grid grid-cols-3 gap-3"></div>
+          <p class="text-xs text-slate-400 mt-3">Bảng 2 mặt vuông góc với mặt tiền — hai chiều đường đều thấy. Chọn Ngang nếu khách muốn bảng nằm ngang (thường cho cửa hàng có chiều ngang rộng).</p>
+        </div>
+
+        <!-- Step 2: Content -->
+        <div class="bg-slate-950/70 border border-slate-800 rounded-2xl p-5 sm:p-6">
+          <div class="flex items-center gap-3 mb-4">
+            <span class="step-num">2</span>
+            <h3 class="text-lg font-bold">Nhập nội dung bảng</h3>
+          </div>
+          <div class="space-y-4" id="content-lines">
+            <div class="line-block" data-line="1">
+              <div class="flex items-center justify-between mb-2">
+                <label class="text-sm font-semibold">Dòng 1 — Tên thương hiệu</label>
+                <label class="inline-flex items-center gap-2 text-xs text-slate-400 cursor-pointer">
+                  <input type="checkbox" class="line-toggle accent-brand-500" data-target="line1On" checked>
+                  Hiển thị
+                </label>
+              </div>
+              <input type="text" class="field" data-state="line1" value="SEONGON SG" maxlength="22" placeholder="VD: PHỞ HÀ NỘI">
+              <div class="mt-3">
+                <div class="flex items-center justify-between mb-1.5">
+                  <span class="text-xs text-slate-400">Cỡ chữ</span>
+                  <span class="text-xs font-semibold text-brand-300">Nấc <span class="size-value" data-target="line1Size">3</span>/5</span>
+                </div>
+                <input type="range" min="1" max="5" step="1" value="3" class="size-slider w-full" data-target="line1Size">
+              </div>
+              <div class="flex items-center gap-2 mt-2">
+                <span class="text-xs text-slate-400">Màu LED:</span>
+                <div class="flex gap-1.5 swatch-row" data-target="line1Color"></div>
+              </div>
+            </div>
+
+            <div class="border-t border-slate-800"></div>
+
+            <div class="line-block" data-line="2">
+              <div class="flex items-center justify-between mb-2">
+                <label class="text-sm font-semibold">Dòng 2 — Sản phẩm / Dịch vụ</label>
+                <label class="inline-flex items-center gap-2 text-xs text-slate-400 cursor-pointer">
+                  <input type="checkbox" class="line-toggle accent-brand-500" data-target="line2On" checked>
+                  Hiển thị
+                </label>
+              </div>
+              <input type="text" class="field" data-state="line2" value="Bảng LED Vẫy" maxlength="22" placeholder="VD: Phở bò - Bún chả">
+              <div class="mt-3">
+                <div class="flex items-center justify-between mb-1.5">
+                  <span class="text-xs text-slate-400">Cỡ chữ</span>
+                  <span class="text-xs font-semibold text-brand-300">Nấc <span class="size-value" data-target="line2Size">2</span>/5</span>
+                </div>
+                <input type="range" min="1" max="5" step="1" value="2" class="size-slider w-full" data-target="line2Size">
+              </div>
+              <div class="flex items-center gap-2 mt-2">
+                <span class="text-xs text-slate-400">Màu LED:</span>
+                <div class="flex gap-1.5 swatch-row" data-target="line2Color"></div>
+              </div>
+            </div>
+
+            <div class="border-t border-slate-800"></div>
+
+            <div class="line-block" data-line="3">
+              <div class="flex items-center justify-between mb-2">
+                <label class="text-sm font-semibold">Dòng 3 — Thông tin phụ (SĐT / slogan)</label>
+                <label class="inline-flex items-center gap-2 text-xs text-slate-400 cursor-pointer">
+                  <input type="checkbox" class="line-toggle accent-brand-500" data-target="line3On" checked>
+                  Hiển thị
+                </label>
+              </div>
+              <input type="text" class="field" data-state="line3" value="0909 999 999" maxlength="22" placeholder="VD: 0909.xxx.xxx">
+              <div class="mt-3">
+                <div class="flex items-center justify-between mb-1.5">
+                  <span class="text-xs text-slate-400">Cỡ chữ</span>
+                  <span class="text-xs font-semibold text-brand-300">Nấc <span class="size-value" data-target="line3Size">1</span>/5</span>
+                </div>
+                <input type="range" min="1" max="5" step="1" value="1" class="size-slider w-full" data-target="line3Size">
+              </div>
+              <div class="flex items-center gap-2 mt-2">
+                <span class="text-xs text-slate-400">Màu LED:</span>
+                <div class="flex gap-1.5 swatch-row" data-target="line3Color"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Step 3: Style -->
+        <div class="bg-slate-950/70 border border-slate-800 rounded-2xl p-5 sm:p-6">
+          <div class="flex items-center gap-3 mb-4">
+            <span class="step-num">3</span>
+            <h3 class="text-lg font-bold">Phong cách</h3>
+          </div>
+
+          <div class="space-y-4">
+            <div>
+              <label class="text-sm text-slate-300 mb-2 block">Màu nền bảng</label>
+              <div class="flex flex-wrap gap-2" id="bg-swatches"></div>
+            </div>
+
+            <div>
+              <label class="text-sm text-slate-300 mb-2 block">Phông chữ</label>
+              <div class="flex flex-wrap gap-2" id="font-options"></div>
+            </div>
+
+            <div>
+              <label class="text-sm text-slate-300 mb-2 block">Khung viền LED</label>
+              <div class="flex items-center gap-3">
+                <label class="inline-flex items-center gap-2 text-sm cursor-pointer">
+                  <input type="checkbox" id="border-toggle" class="accent-brand-500" checked>
+                  Bật viền LED
+                </label>
+                <div class="flex gap-1.5 swatch-row" data-target="borderColor"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Step 4: Effect -->
+        <div class="bg-slate-950/70 border border-slate-800 rounded-2xl p-5 sm:p-6">
+          <div class="flex items-center gap-3 mb-4">
+            <span class="step-num">4</span>
+            <h3 class="text-lg font-bold">Hiệu ứng nhấp nháy</h3>
+          </div>
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-2" id="effect-options"></div>
+          <p class="text-xs text-slate-400 mt-3">Bảng thật có thể lập trình hiệu ứng tuỳ ý qua phần mềm OneLED / LED4U.</p>
+        </div>
+
+        <!-- Actions -->
+        <div class="flex flex-wrap gap-3 pt-2">
+          <button id="download-btn" class="inline-flex items-center gap-2 bg-yellow-400 hover:bg-yellow-300 text-slate-900 px-5 py-3 rounded-xl font-bold transition shadow-lg">
+            📥 Tải ảnh thiết kế (PNG)
+          </button>
+          <a href="#contact" id="quote-btn" class="inline-flex items-center gap-2 bg-brand-500 hover:bg-brand-600 px-5 py-3 rounded-xl font-bold transition shadow-lg shadow-brand-500/20">
+            📞 Gửi thiết kế này để báo giá
+          </a>
+          <button id="reset-btn" class="inline-flex items-center gap-2 bg-slate-800 hover:bg-slate-700 px-5 py-3 rounded-xl font-semibold transition border border-slate-700 text-sm">
+            ↻ Khôi phục mặc định
+          </button>
+        </div>
+      </div>
+
+      <!-- ============ Preview ============ -->
+      <div class="preview-sticky">
+        <div class="bg-slate-950 border border-slate-800 rounded-2xl p-5 sm:p-6">
+          <div class="flex items-center justify-between mb-4">
+            <div>
+              <h3 class="font-bold">Xem trước</h3>
+              <div class="text-xs text-slate-400 mt-0.5">Mô phỏng đúng tỷ lệ thật</div>
+            </div>
+            <div class="inline-flex bg-slate-900 rounded-lg p-1 gap-1 text-xs">
+              <button class="mode-btn px-3 py-1.5 rounded-md font-semibold transition" data-mode="night">🌙 Đêm</button>
+              <button class="mode-btn px-3 py-1.5 rounded-md font-semibold transition" data-mode="day">☀ Ngày</button>
+            </div>
+          </div>
+
+          <div id="canvas-wrap" class="flex justify-center items-center rounded-xl p-4 transition-colors min-h-[400px]">
+            <canvas id="board-canvas"></canvas>
+          </div>
+
+          <div class="mt-4 grid grid-cols-3 gap-2 text-center text-xs">
+            <div class="bg-slate-900 rounded-lg py-2">
+              <div class="text-slate-400">Kích thước</div>
+              <div class="font-bold text-white mt-0.5" id="info-size">50×70 cm</div>
+            </div>
+            <div class="bg-slate-900 rounded-lg py-2">
+              <div class="text-slate-400">Bóng LED dùng</div>
+              <div class="font-bold text-white mt-0.5" id="info-led-count">—</div>
+            </div>
+            <div class="bg-slate-900 rounded-lg py-2">
+              <div class="text-slate-400">LED / Pitch</div>
+              <div class="font-bold text-white mt-0.5">5mm / 10mm</div>
+            </div>
+          </div>
+
+          <div class="mt-4 text-[11px] text-slate-500 leading-relaxed">
+            * Mỗi điểm sáng là <strong class="text-slate-300">1 bóng LED ruồi F5</strong> (đường kính 5mm), tâm-tâm cách nhau 10mm. Bóng chỉ được khoan lỗ và cắm tại <strong class="text-slate-300">đúng viền nét chữ</strong> (chữ rỗng ở giữa) — đúng nguyên lý biển vẫy thực tế: CNC khoan lỗ trên Alu 3mm theo file thiết kế, sau đó cắm bóng LED tương ứng.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================ WHY ============================================ -->
+<section id="why" class="py-16 md:py-24 bg-slate-950">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6">
+    <div class="text-center max-w-3xl mx-auto mb-12 reveal">
+      <h2 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight mb-4">
+        Vì sao chọn bảng LED vẫy<br>của <span class="text-brand-500">SEONGON SG</span>
+      </h2>
+      <p class="text-slate-400">6 lợi ích thực tế mà chủ cửa hàng quan tâm nhất.</p>
+    </div>
+
+    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
+      <div class="reveal group bg-gradient-to-br from-slate-900 to-slate-950 border border-slate-800 hover:border-brand-500/40 rounded-2xl p-6 transition">
+        <div class="w-12 h-12 rounded-xl bg-brand-500/15 text-brand-400 flex items-center justify-center text-2xl mb-4">↔️</div>
+        <h3 class="font-bold text-lg mb-2">Thấy từ 2 chiều đường</h3>
+        <p class="text-sm text-slate-400 leading-relaxed">Lắp vuông góc mặt tiền, bảng 2 mặt — khách đi 2 hướng đều thấy. Tăng tỉ lệ chú ý <strong class="text-white">80–90%</strong> so với biển 1 mặt.</p>
+      </div>
+
+      <div class="reveal group bg-gradient-to-br from-slate-900 to-slate-950 border border-slate-800 hover:border-brand-500/40 rounded-2xl p-6 transition">
+        <div class="w-12 h-12 rounded-xl bg-brand-500/15 text-brand-400 flex items-center justify-center text-2xl mb-4">⚡</div>
+        <h3 class="font-bold text-lg mb-2">Cực kỳ tiết kiệm điện</h3>
+        <p class="text-sm text-slate-400 leading-relaxed">LED ruồi F5 chỉ chạy 5V, công suất bằng <strong class="text-white">1/10</strong> đèn neon. Bật cả ngày cũng không tốn điện đáng kể.</p>
+      </div>
+
+      <div class="reveal group bg-gradient-to-br from-slate-900 to-slate-950 border border-slate-800 hover:border-brand-500/40 rounded-2xl p-6 transition">
+        <div class="w-12 h-12 rounded-xl bg-brand-500/15 text-brand-400 flex items-center justify-center text-2xl mb-4">⏱</div>
+        <h3 class="font-bold text-lg mb-2">Tuổi thọ ~10 năm</h3>
+        <p class="text-sm text-slate-400 leading-relaxed">LED chính hãng đạt <strong class="text-white">~100.000 giờ</strong> hoạt động ngoài trời. Bảo hành 12 tháng, bảo trì trọn đời.</p>
+      </div>
+
+      <div class="reveal group bg-gradient-to-br from-slate-900 to-slate-950 border border-slate-800 hover:border-brand-500/40 rounded-2xl p-6 transition">
+        <div class="w-12 h-12 rounded-xl bg-brand-500/15 text-brand-400 flex items-center justify-center text-2xl mb-4">🎨</div>
+        <h3 class="font-bold text-lg mb-2">Hiệu ứng đa dạng</h3>
+        <p class="text-sm text-slate-400 leading-relaxed">Nhấp nháy, viền chạy, đổi màu, chạy chữ — lập trình tuỳ ý qua phần mềm OneLED / LED4U.</p>
+      </div>
+
+      <div class="reveal group bg-gradient-to-br from-slate-900 to-slate-950 border border-slate-800 hover:border-brand-500/40 rounded-2xl p-6 transition">
+        <div class="w-12 h-12 rounded-xl bg-brand-500/15 text-brand-400 flex items-center justify-center text-2xl mb-4">🛠</div>
+        <h3 class="font-bold text-lg mb-2">Xưởng sản xuất trực tiếp</h3>
+        <p class="text-sm text-slate-400 leading-relaxed">Đục CNC chính xác trên Alu 3mm, không qua trung gian — giá tốt, chất lượng đảm bảo.</p>
+      </div>
+
+      <div class="reveal group bg-gradient-to-br from-slate-900 to-slate-950 border border-slate-800 hover:border-brand-500/40 rounded-2xl p-6 transition">
+        <div class="w-12 h-12 rounded-xl bg-brand-500/15 text-brand-400 flex items-center justify-center text-2xl mb-4">🚚</div>
+        <h3 class="font-bold text-lg mb-2">Miễn phí lắp đặt</h3>
+        <p class="text-sm text-slate-400 leading-relaxed">Tư vấn → khảo sát → thiết kế → lắp đặt tận nơi nội thành TP.HCM. Bạn chỉ việc bật điện và đón khách.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================ GALLERY ============================================ -->
+<section id="gallery" class="py-16 md:py-24 bg-gradient-to-b from-slate-950 to-slate-900">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6">
+    <div class="text-center max-w-3xl mx-auto mb-12 reveal">
+      <h2 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight mb-4">
+        Mẫu bảng theo <span class="text-brand-500">ngành nghề</span>
+      </h2>
+      <p class="text-slate-400">Một vài gợi ý cho ngành phổ biến — bạn có thể tham khảo và thay đổi theo thương hiệu của mình.</p>
+    </div>
+
+    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-5" id="gallery-grid"></div>
+  </div>
+</section>
+
+<!-- ============================================ PRICING ============================================ -->
+<section id="pricing" class="py-16 md:py-24 bg-slate-950">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6">
+    <div class="text-center max-w-3xl mx-auto mb-12 reveal">
+      <h2 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight mb-4">
+        Bảng giá <span class="text-brand-500">tham khảo</span>
+      </h2>
+      <p class="text-slate-400">Giá đã bao gồm thiết kế, vật tư, lắp đặt nội thành và bảo hành 12 tháng.</p>
+    </div>
+
+    <div class="grid md:grid-cols-3 gap-5 max-w-5xl mx-auto">
+      <div class="reveal bg-gradient-to-br from-slate-900 to-slate-950 border border-slate-800 rounded-2xl p-6 sm:p-7">
+        <div class="text-sm text-slate-400 mb-1">Gói Nhỏ</div>
+        <div class="text-2xl font-extrabold mb-1">40×60 cm</div>
+        <div class="flex items-baseline gap-1 mt-3 mb-5">
+          <span class="text-3xl font-extrabold text-white">2.300.000</span>
+          <span class="text-sm text-slate-400">đ / bảng</span>
+        </div>
+        <ul class="space-y-2.5 text-sm text-slate-300 mb-6">
+          <li class="flex gap-2"><span class="text-brand-500">✓</span> Bảng 2 mặt, ~2.400 bóng LED F5</li>
+          <li class="flex gap-2"><span class="text-brand-500">✓</span> Khung Alu 3mm + viền nhôm</li>
+          <li class="flex gap-2"><span class="text-brand-500">✓</span> Mạch điều khiển hiệu ứng</li>
+          <li class="flex gap-2"><span class="text-brand-500">✓</span> Bảo hành 12 tháng</li>
+          <li class="flex gap-2 text-slate-400"><span>·</span> Phù hợp: tạp hoá, ki-ốt nhỏ</li>
+        </ul>
+        <a href="#designer" class="block text-center bg-slate-800 hover:bg-slate-700 py-3 rounded-xl font-semibold border border-slate-700 transition">Thiết kế gói này</a>
+      </div>
+
+      <div class="reveal bg-gradient-to-br from-brand-900/30 to-slate-900 border-2 border-brand-500 rounded-2xl p-6 sm:p-7 relative shadow-2xl shadow-brand-500/10">
+        <div class="absolute -top-3 left-1/2 -translate-x-1/2 bg-yellow-400 text-slate-900 px-3 py-1 rounded-full text-xs font-extrabold">
+          ⭐ PHỔ BIẾN NHẤT
+        </div>
+        <div class="text-sm text-brand-300 mb-1">Gói Vừa</div>
+        <div class="text-2xl font-extrabold mb-1">50×70 cm</div>
+        <div class="flex items-baseline gap-1 mt-3 mb-5">
+          <span class="text-3xl font-extrabold text-white">2.900.000</span>
+          <span class="text-sm text-slate-400">đ / bảng</span>
+        </div>
+        <ul class="space-y-2.5 text-sm text-slate-300 mb-6">
+          <li class="flex gap-2"><span class="text-brand-500">✓</span> Bảng 2 mặt, ~3.500 bóng LED F5</li>
+          <li class="flex gap-2"><span class="text-brand-500">✓</span> Khung Alu 3mm + viền nhôm cao cấp</li>
+          <li class="flex gap-2"><span class="text-brand-500">✓</span> Mạch hiệu ứng đa chế độ</li>
+          <li class="flex gap-2"><span class="text-brand-500">✓</span> Bảo hành 12 tháng + bảo trì miễn phí</li>
+          <li class="flex gap-2 text-slate-400"><span>·</span> Phù hợp: cafe, nail, spa, nhà thuốc</li>
+        </ul>
+        <a href="#designer" class="block text-center bg-brand-500 hover:bg-brand-600 py-3 rounded-xl font-bold transition">Thiết kế gói này</a>
+      </div>
+
+      <div class="reveal bg-gradient-to-br from-slate-900 to-slate-950 border border-slate-800 rounded-2xl p-6 sm:p-7">
+        <div class="text-sm text-slate-400 mb-1">Gói Lớn</div>
+        <div class="text-2xl font-extrabold mb-1">60×80 cm</div>
+        <div class="flex items-baseline gap-1 mt-3 mb-5">
+          <span class="text-3xl font-extrabold text-white">3.500.000</span>
+          <span class="text-sm text-slate-400">đ / bảng</span>
+        </div>
+        <ul class="space-y-2.5 text-sm text-slate-300 mb-6">
+          <li class="flex gap-2"><span class="text-brand-500">✓</span> Bảng 2 mặt, ~4.800 bóng LED F5</li>
+          <li class="flex gap-2"><span class="text-brand-500">✓</span> Khung Alu 3mm + viền nhôm xi mạ</li>
+          <li class="flex gap-2"><span class="text-brand-500">✓</span> Mạch hiệu ứng full chế độ</li>
+          <li class="flex gap-2"><span class="text-brand-500">✓</span> Bảo hành 12 tháng + bảo trì miễn phí</li>
+          <li class="flex gap-2 text-slate-400"><span>·</span> Phù hợp: shop thời trang, karaoke, spa lớn</li>
+        </ul>
+        <a href="#designer" class="block text-center bg-slate-800 hover:bg-slate-700 py-3 rounded-xl font-semibold border border-slate-700 transition">Thiết kế gói này</a>
+      </div>
+    </div>
+
+    <p class="text-center text-xs text-slate-500 mt-6 max-w-2xl mx-auto">
+      Giá có thể thay đổi tuỳ độ phức tạp thiết kế, số lượng bóng LED, hiệu ứng đặc biệt. Vui lòng liên hệ để được báo giá chính xác sau khi thiết kế xong.
+    </p>
+  </div>
+</section>
+
+<!-- ============================================ PROCESS ============================================ -->
+<section id="process" class="py-16 md:py-24 bg-gradient-to-b from-slate-900 to-slate-950">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6">
+    <div class="text-center max-w-3xl mx-auto mb-12 reveal">
+      <h2 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight mb-4">
+        Quy trình <span class="text-brand-500">7 bước</span>
+      </h2>
+      <p class="text-slate-400">Từ tư vấn đến lắp đặt — chỉ trong 3–5 ngày làm việc.</p>
+    </div>
+
+    <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div class="reveal bg-slate-900 border border-slate-800 rounded-xl p-5">
+        <div class="text-brand-500 text-xs font-bold mb-2">BƯỚC 01</div>
+        <div class="font-bold mb-1">Tư vấn & lên ý tưởng</div>
+        <p class="text-xs text-slate-400">Trao đổi nội dung, logo, slogan qua điện thoại / Zalo.</p>
+      </div>
+      <div class="reveal bg-slate-900 border border-slate-800 rounded-xl p-5">
+        <div class="text-brand-500 text-xs font-bold mb-2">BƯỚC 02</div>
+        <div class="font-bold mb-1">Thiết kế file Corel/AI</div>
+        <p class="text-xs text-slate-400">Định vị lỗ khoan cho bóng LED theo nội dung.</p>
+      </div>
+      <div class="reveal bg-slate-900 border border-slate-800 rounded-xl p-5">
+        <div class="text-brand-500 text-xs font-bold mb-2">BƯỚC 03</div>
+        <div class="font-bold mb-1">Đục lỗ CNC trên Alu</div>
+        <p class="text-xs text-slate-400">Máy CNC đục chính xác theo từng vị trí bóng.</p>
+      </div>
+      <div class="reveal bg-slate-900 border border-slate-800 rounded-xl p-5">
+        <div class="text-brand-500 text-xs font-bold mb-2">BƯỚC 04</div>
+        <div class="font-bold mb-1">Tính bóng & chọn nguồn</div>
+        <p class="text-xs text-slate-400">Số bóng LED, công suất nguồn DC 5V.</p>
+      </div>
+      <div class="reveal bg-slate-900 border border-slate-800 rounded-xl p-5">
+        <div class="text-brand-500 text-xs font-bold mb-2">BƯỚC 05</div>
+        <div class="font-bold mb-1">Cắm bóng & đấu mạch</div>
+        <p class="text-xs text-slate-400">Hoàn thiện linh kiện bên trong bảng.</p>
+      </div>
+      <div class="reveal bg-slate-900 border border-slate-800 rounded-xl p-5">
+        <div class="text-brand-500 text-xs font-bold mb-2">BƯỚC 06</div>
+        <div class="font-bold mb-1">Lập trình hiệu ứng</div>
+        <p class="text-xs text-slate-400">Phần mềm OneLED / LED4U — chọn nhấp nháy, viền chạy…</p>
+      </div>
+      <div class="reveal bg-slate-900 border border-slate-800 rounded-xl p-5">
+        <div class="text-brand-500 text-xs font-bold mb-2">BƯỚC 07</div>
+        <div class="font-bold mb-1">Lắp đặt tận nơi</div>
+        <p class="text-xs text-slate-400">Treo bảng vuông góc mặt tiền, đấu điện, nghiệm thu.</p>
+      </div>
+      <div class="reveal bg-gradient-to-br from-brand-500 to-brand-700 rounded-xl p-5 text-white">
+        <div class="text-yellow-200 text-xs font-bold mb-2">✓ HOÀN THÀNH</div>
+        <div class="font-bold mb-1">Bảo hành 12 tháng</div>
+        <p class="text-xs text-white/90">Hỗ trợ bảo trì trọn đời, thay LED hỏng miễn phí trong năm đầu.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================ FAQ ============================================ -->
+<section id="faq" class="py-16 md:py-24 bg-slate-950">
+  <div class="max-w-3xl mx-auto px-4 sm:px-6">
+    <div class="text-center mb-12 reveal">
+      <h2 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight mb-4">
+        Câu hỏi <span class="text-brand-500">thường gặp</span>
+      </h2>
+      <p class="text-slate-400">Những thắc mắc phổ biến từ chủ cửa hàng.</p>
+    </div>
+
+    <div class="space-y-3">
+      <details class="bg-slate-900 border border-slate-800 rounded-xl">
+        <summary class="flex items-center justify-between gap-4 p-5 font-semibold">
+          <span>Bảng LED vẫy khác gì với bảng hiệu chính ở mặt tiền?</span>
+          <span class="faq-icon text-brand-500 text-xl">+</span>
+        </summary>
+        <div class="px-5 pb-5 text-sm text-slate-300 leading-relaxed">
+          Bảng hiệu chính nằm <strong>song song</strong> với mặt tiền, chỉ thấy khi đứng đối diện cửa hàng. Bảng LED vẫy lắp <strong>vuông góc</strong> với mặt tiền, có 2 mặt — người đi đường từ <strong>cả hai chiều</strong> đều thấy. Đây là vị trí "phụ" nhưng cực kỳ hiệu quả vì đón được khách lướt qua.
+        </div>
+      </details>
+
+      <details class="bg-slate-900 border border-slate-800 rounded-xl">
+        <summary class="flex items-center justify-between gap-4 p-5 font-semibold">
+          <span>Bảo hành bao lâu? Bóng cháy có được thay không?</span>
+          <span class="faq-icon text-brand-500 text-xl">+</span>
+        </summary>
+        <div class="px-5 pb-5 text-sm text-slate-300 leading-relaxed">
+          Bảo hành <strong>12 tháng</strong> đầy đủ — bao gồm bóng LED, mạch điều khiển, nguồn. Trong thời gian này, bóng cháy / mạch hỏng được thay miễn phí. Sau 12 tháng vẫn hỗ trợ bảo trì với chi phí linh kiện ưu đãi.
+        </div>
+      </details>
+
+      <details class="bg-slate-900 border border-slate-800 rounded-xl">
+        <summary class="flex items-center justify-between gap-4 p-5 font-semibold">
+          <span>Tuổi thọ thực tế của bảng được bao lâu?</span>
+          <span class="faq-icon text-brand-500 text-xl">+</span>
+        </summary>
+        <div class="px-5 pb-5 text-sm text-slate-300 leading-relaxed">
+          LED chính hãng đạt khoảng <strong>100.000 giờ</strong> — tương đương <strong>~10 năm</strong> nếu bật ~8h/ngày. Nếu bật 24/7 thì tuổi thọ sẽ rút ngắn còn ~3–5 năm.
+        </div>
+      </details>
+
+      <details class="bg-slate-900 border border-slate-800 rounded-xl">
+        <summary class="flex items-center justify-between gap-4 p-5 font-semibold">
+          <span>Thi công mất bao lâu? Có lắp đặt tận nơi không?</span>
+          <span class="faq-icon text-brand-500 text-xl">+</span>
+        </summary>
+        <div class="px-5 pb-5 text-sm text-slate-300 leading-relaxed">
+          Thường <strong>3–5 ngày làm việc</strong> tính từ lúc chốt thiết kế. Có lắp đặt <strong>tận nơi miễn phí</strong> trong nội thành TP.HCM. Ngoại thành hoặc tỉnh khác sẽ tính thêm phí vận chuyển.
+        </div>
+      </details>
+
+      <details class="bg-slate-900 border border-slate-800 rounded-xl">
+        <summary class="flex items-center justify-between gap-4 p-5 font-semibold">
+          <span>Sau này có thể thay đổi nội dung bảng không?</span>
+          <span class="faq-icon text-brand-500 text-xl">+</span>
+        </summary>
+        <div class="px-5 pb-5 text-sm text-slate-300 leading-relaxed">
+          Vì bảng LED vẫy đục lỗ <strong>cố định</strong> theo thiết kế ban đầu (chữ và logo), nên không thể đổi nội dung. Tuy nhiên <strong>hiệu ứng nhấp nháy</strong> có thể lập trình lại bất kỳ lúc nào qua phần mềm. Nếu muốn đổi nội dung hoàn toàn, sẽ phải làm bảng mới.
+        </div>
+      </details>
+
+      <details class="bg-slate-900 border border-slate-800 rounded-xl">
+        <summary class="flex items-center justify-between gap-4 p-5 font-semibold">
+          <span>Bảng có chịu được mưa nắng ngoài trời không?</span>
+          <span class="faq-icon text-brand-500 text-xl">+</span>
+        </summary>
+        <div class="px-5 pb-5 text-sm text-slate-300 leading-relaxed">
+          Có. LED ruồi được bọc nhựa kín, chống thấm nước và oxi hoá. Khung Alu chống gỉ, chịu nắng tốt. Mạch điều khiển và nguồn đặt trong hộp kín. Bảng có thể lắp ngoài trời hoàn toàn.
+        </div>
+      </details>
+
+      <details class="bg-slate-900 border border-slate-800 rounded-xl">
+        <summary class="flex items-center justify-between gap-4 p-5 font-semibold">
+          <span>Có làm bảng hình tròn / elip không? Hay chỉ chữ nhật?</span>
+          <span class="faq-icon text-brand-500 text-xl">+</span>
+        </summary>
+        <div class="px-5 pb-5 text-sm text-slate-300 leading-relaxed">
+          Hiện công cụ thiết kế trên web chỉ hỗ trợ hình chữ nhật (3 size phổ biến). Nhưng trong thực tế, SEONGON SG có thể làm bảng <strong>tròn, elip, chữ nhật bo tròn, hình cầu</strong> — vui lòng liên hệ trực tiếp để được tư vấn.
+        </div>
+      </details>
+
+      <details class="bg-slate-900 border border-slate-800 rounded-xl">
+        <summary class="flex items-center justify-between gap-4 p-5 font-semibold">
+          <span>Quy định pháp luật về treo bảng vẫy?</span>
+          <span class="faq-icon text-brand-500 text-xl">+</span>
+        </summary>
+        <div class="px-5 pb-5 text-sm text-slate-300 leading-relaxed">
+          Theo Luật Quảng cáo 2012 & TCVN 8794:2022:<br>
+          • Độ vươn khỏi mặt tường: <strong>tối đa 1m</strong><br>
+          • Mép dưới bảng cách mặt đất: <strong>≥ 2,5m</strong><br>
+          • Biển dọc không vượt 2m cao × 1m rộng<br>
+          Các size 40×60, 50×70, 60×80 cm hoàn toàn nằm trong quy định.
+        </div>
+      </details>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================ CONTACT ============================================ -->
+<section id="contact" class="py-16 md:py-24 bg-gradient-to-br from-brand-900/30 via-slate-950 to-slate-950 relative overflow-hidden">
+  <div class="absolute inset-0 led-grid-bg opacity-30 pointer-events-none"></div>
+  <div class="absolute top-0 left-1/4 w-72 h-72 rounded-full bg-brand-500/20 blur-3xl pointer-events-none"></div>
+
+  <div class="relative max-w-4xl mx-auto px-4 sm:px-6 text-center">
+    <div class="inline-flex items-center gap-2 bg-yellow-400/10 text-yellow-300 px-4 py-1.5 rounded-full text-sm font-semibold mb-6 border border-yellow-400/20">
+      📞 LIÊN HỆ NGAY
+    </div>
+    <h2 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight mb-4">
+      Sẵn sàng để bảng của bạn<br><span class="text-brand-500 glow-text">tỏa sáng</span> ngoài đường?
+    </h2>
+    <p class="text-slate-300 mb-10 max-w-2xl mx-auto">
+      Gửi thiết kế của bạn cho chúng tôi — đội ngũ SEONGON SG sẽ tư vấn & báo giá chính xác trong vòng <strong class="text-white">2 giờ làm việc</strong>.
+    </p>
+
+    <div class="grid sm:grid-cols-3 gap-4 max-w-3xl mx-auto mb-10">
+      <a href="tel:0909999999" class="bg-slate-900/70 border border-slate-800 hover:border-brand-500/50 rounded-2xl p-5 transition group">
+        <div class="text-2xl mb-2">📞</div>
+        <div class="text-sm text-slate-400">Hotline</div>
+        <div class="font-bold text-white group-hover:text-brand-300">0909 999 999</div>
+      </a>
+      <a href="https://zalo.me/0909999999" target="_blank" class="bg-slate-900/70 border border-slate-800 hover:border-brand-500/50 rounded-2xl p-5 transition group">
+        <div class="text-2xl mb-2">💬</div>
+        <div class="text-sm text-slate-400">Zalo</div>
+        <div class="font-bold text-white group-hover:text-brand-300">0909 999 999</div>
+      </a>
+      <a href="mailto:hello@seongon-sg.vn" class="bg-slate-900/70 border border-slate-800 hover:border-brand-500/50 rounded-2xl p-5 transition group">
+        <div class="text-2xl mb-2">✉️</div>
+        <div class="text-sm text-slate-400">Email</div>
+        <div class="font-bold text-white group-hover:text-brand-300">hello@seongon-sg.vn</div>
+      </a>
+    </div>
+
+    <a href="#designer" class="inline-flex items-center gap-2 bg-brand-500 hover:bg-brand-600 px-7 py-4 rounded-xl font-bold text-lg transition shadow-2xl shadow-brand-500/30">
+      Thiết kế bảng ngay
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+    </a>
+  </div>
+</section>
+
+<!-- ============================================ FOOTER ============================================ -->
+<footer class="bg-slate-950 border-t border-slate-800 py-10">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 flex flex-col md:flex-row items-center justify-between gap-4 text-sm text-slate-400">
+    <div class="flex items-center gap-2.5">
+      <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-brand-500 to-brand-700 flex items-center justify-center font-extrabold text-xs">SG</div>
+      <div>
+        <div class="font-bold text-white">SEONGON SG</div>
+        <div class="text-xs">Chuyên bảng LED vẫy 2 mặt cho cửa hàng</div>
+      </div>
+    </div>
+    <div class="text-xs text-center md:text-right">
+      © 2026 SEONGON SG. All rights reserved.<br>
+      <span class="text-slate-500">Hotline: 0909 999 999 · hello@seongon-sg.vn</span>
+    </div>
+  </div>
+</footer>
+
+<!-- ============================================ MODAL: SEND REQUEST (simple) ============================================ -->
+<!-- (Optional, kept light — user can extend) -->
+
+<!-- ============================================ SCRIPT ============================================ -->
+<script>
+/* =====================================================================
+   SEONGON SG — Bảng LED Vẫy Designer
+   ===================================================================== */
+
+// ---------- Constants (thông số thực tế của bảng LED vẫy) ----------
+const SIZES = {
+  '40x60': { w: 400, h: 600, label: '40×60 cm' },
+  '50x70': { w: 500, h: 700, label: '50×70 cm' },
+  '60x80': { w: 600, h: 800, label: '60×80 cm' }
+};
+const PITCH = 10;           // mm — khoảng cách tâm-tâm giữa 2 bóng LED
+const LED_DIAMETER = 5;     // mm — đường kính bóng LED ruồi F5
+
+// Lấy kích thước bảng hiện tại có tính hướng (Dọc/Ngang).
+// Khi Ngang: swap w/h → bảng nằm ngang, cols nhiều, rows ít.
+function getBoardDims() {
+  const base = SIZES[state.size];
+  const landscape = state.orientation === 'landscape';
+  const w = landscape ? base.h : base.w;
+  const h = landscape ? base.w : base.h;
+  const cols = Math.floor(w / PITCH);
+  const rows = Math.floor(h / PITCH);
+  const dim1 = base.w / 10, dim2 = base.h / 10;
+  const label = landscape ? `${dim2}×${dim1} cm (ngang)` : `${dim1}×${dim2} cm (dọc)`;
+  return { w, h, cols, rows, label };
+}
+
+const LED_COLORS = [
+  { name: 'Đỏ',         value: '#ff2530' },
+  { name: 'Vàng',       value: '#ffd200' },
+  { name: 'Trắng',      value: '#ffffff' },
+  { name: 'Xanh dương', value: '#3399ff' },
+  { name: 'Xanh lá',    value: '#3eff5e' },
+  { name: 'Hồng',       value: '#ff4dab' },
+  { name: 'Cam',        value: '#ff8a30' }
+];
+
+const BG_COLORS = [
+  { name: 'Đen',        value: '#000000' },
+  { name: 'Trắng',      value: '#e8e8e8' },
+  { name: 'Đỏ thẫm',    value: '#3a0808' },
+  { name: 'Xanh thẫm',  value: '#0a1d3a' },
+  { name: 'Xanh rêu',   value: '#0a2a18' }
+];
+
+// Đổi sang font PIXEL-STYLE — Pixelify Sans được thiết kế cho hiển thị pixel-art,
+// glyph là tổ hợp ô vuông pixel rõ ràng, không bị blob khi hiển thị nhỏ.
+// Có Vietnamese đầy đủ. Mỗi "pixel" của font tương ứng với ~1 LED cell.
+const FONTS = [
+  { id: 'sans',    name: 'Pixel',      family: 'Pixelify Sans',  wSingle: '500', wOutline: '700', scale: 1.25 },
+  { id: 'display', name: 'Đậm in',     family: 'Bebas Neue',     wSingle: '400', wOutline: '400', scale: 1.05 },
+  { id: 'script',  name: 'Viết tay',   family: 'Dancing Script', wSingle: '400', wOutline: '700', scale: 1.20 }
+];
+
+// 5 nấc cỡ chữ — chi tiết mapping ở LEVEL_TO_FONT (đặt sau khi định nghĩa fonts).
+
+// ============================================================================
+// BITMAP FONTS — hand-coded, pixel-perfect cho LED rendering
+// Mỗi glyph là ma trận W×H, 'X' = bóng LED ON, '.' = không có lỗ.
+// Render trực tiếp vào lưới LED — KHÔNG qua Canvas font, không AA, không hinting.
+// ============================================================================
+
+// FONT 3×5 — micro size, chỉ uppercase + digits (lowercase fallback uppercase)
+const FONT_3x5 = {
+  W: 3, H: 5,
+  chars: {
+    '0':['XXX','X.X','X.X','X.X','XXX'],
+    '1':['XX.','.X.','.X.','.X.','XXX'],
+    '2':['XXX','..X','XXX','X..','XXX'],
+    '3':['XXX','..X','XXX','..X','XXX'],
+    '4':['X.X','X.X','XXX','..X','..X'],
+    '5':['XXX','X..','XXX','..X','XXX'],
+    '6':['XXX','X..','XXX','X.X','XXX'],
+    '7':['XXX','..X','.X.','.X.','X..'],
+    '8':['XXX','X.X','XXX','X.X','XXX'],
+    '9':['XXX','X.X','XXX','..X','XXX'],
+    ' ':['...','...','...','...','...'],
+    '.':['...','...','...','...','.X.'],
+    ',':['...','...','...','.X.','X..'],
+    '-':['...','...','XXX','...','...'],
+    '/':['..X','..X','.X.','X..','X..'],
+    '!':['.X.','.X.','.X.','...','.X.'],
+    '?':['XX.','..X','.X.','...','.X.'],
+    ':':['...','.X.','...','.X.','...'],
+    'A':['.X.','X.X','XXX','X.X','X.X'],
+    'B':['XX.','X.X','XX.','X.X','XX.'],
+    'C':['XXX','X..','X..','X..','XXX'],
+    'D':['XX.','X.X','X.X','X.X','XX.'],
+    'E':['XXX','X..','XX.','X..','XXX'],
+    'F':['XXX','X..','XX.','X..','X..'],
+    'G':['XXX','X..','X.X','X.X','XXX'],
+    'H':['X.X','X.X','XXX','X.X','X.X'],
+    'I':['XXX','.X.','.X.','.X.','XXX'],
+    'J':['..X','..X','..X','X.X','XX.'],
+    'K':['X.X','X.X','XX.','X.X','X.X'],
+    'L':['X..','X..','X..','X..','XXX'],
+    'M':['X.X','XXX','XXX','X.X','X.X'],
+    'N':['X.X','XX.','XXX','.XX','X.X'],
+    'O':['XXX','X.X','X.X','X.X','XXX'],
+    'P':['XX.','X.X','XX.','X..','X..'],
+    'Q':['XXX','X.X','X.X','XX.','.XX'],
+    'R':['XX.','X.X','XX.','X.X','X.X'],
+    'S':['XXX','X..','.X.','..X','XXX'],
+    'T':['XXX','.X.','.X.','.X.','.X.'],
+    'U':['X.X','X.X','X.X','X.X','XXX'],
+    'V':['X.X','X.X','X.X','X.X','.X.'],
+    'W':['X.X','X.X','XXX','XXX','X.X'],
+    'X':['X.X','X.X','.X.','X.X','X.X'],
+    'Y':['X.X','X.X','.X.','.X.','.X.'],
+    'Z':['XXX','..X','.X.','X..','XXX'],
+    'Đ':['XX.','X.X','XXX','X.X','XX.']   // D với crossbar (Đ)
+  }
+};
+
+// FONT 5×7 — full size, có lowercase + Vietnamese đầy đủ
+const FONT_5x7 = {
+  W: 5, H: 7,
+  chars: {
+  // ----- Digits -----
+  '0': [' XXX ','X...X','X..XX','X.X.X','XX..X','X...X',' XXX '],
+  '1': ['..X..','.XX..','..X..','..X..','..X..','..X..','.XXX.'],
+  '2': [' XXX ','X...X','....X','...X.','..X..','.X...','XXXXX'],
+  '3': [' XXX ','X...X','....X','..XX.','....X','X...X',' XXX '],
+  '4': ['...X.','..XX.','.X.X.','X..X.','XXXXX','...X.','...X.'],
+  '5': ['XXXXX','X....','XXXX.','....X','....X','X...X',' XXX '],
+  '6': [' XXX ','X....','X....','XXXX.','X...X','X...X',' XXX '],
+  '7': ['XXXXX','....X','...X.','..X..','.X...','.X...','.X...'],
+  '8': [' XXX ','X...X','X...X',' XXX ','X...X','X...X',' XXX '],
+  '9': [' XXX ','X...X','X...X',' XXXX','....X','....X',' XXX '],
+
+  // ----- Space + punctuation -----
+  ' ': ['.....','.....','.....','.....','.....','.....','.....'],
+  '.': ['.....','.....','.....','.....','.....','..X..','..X..'],
+  ',': ['.....','.....','.....','.....','.....','..X..','.X...'],
+  '!': ['..X..','..X..','..X..','..X..','..X..','.....','..X..'],
+  '?': [' XXX ','X...X','....X','...X.','..X..','.....','..X..'],
+  '-': ['.....','.....','.....','XXXXX','.....','.....','.....'],
+  '/': ['....X','....X','...X.','..X..','.X...','X....','X....'],
+  ':': ['.....','..X..','.....','.....','.....','..X..','.....'],
+  '+': ['.....','..X..','..X..','XXXXX','..X..','..X..','.....'],
+  '*': ['.....','X.X.X','.XXX.','XXXXX','.XXX.','X.X.X','.....'],
+  '(': ['..XX.','.X...','.X...','.X...','.X...','.X...','..XX.'],
+  ')': ['.XX..','...X.','...X.','...X.','...X.','...X.','.XX..'],
+
+  // ----- Uppercase A-Z -----
+  'A': [' XXX ','X...X','X...X','XXXXX','X...X','X...X','X...X'],
+  'B': ['XXXX.','X...X','X...X','XXXX.','X...X','X...X','XXXX.'],
+  'C': [' XXXX','X....','X....','X....','X....','X....',' XXXX'],
+  'D': ['XXXX.','X...X','X...X','X...X','X...X','X...X','XXXX.'],
+  'E': ['XXXXX','X....','X....','XXXX.','X....','X....','XXXXX'],
+  'F': ['XXXXX','X....','X....','XXXX.','X....','X....','X....'],
+  'G': [' XXXX','X....','X....','X..XX','X...X','X...X',' XXXX'],
+  'H': ['X...X','X...X','X...X','XXXXX','X...X','X...X','X...X'],
+  'I': [' XXX.','..X..','..X..','..X..','..X..','..X..',' XXX.'],
+  'J': ['..XXX','...X.','...X.','...X.','...X.','X..X.',' XX..'],
+  'K': ['X...X','X..X.','X.X..','XX...','X.X..','X..X.','X...X'],
+  'L': ['X....','X....','X....','X....','X....','X....','XXXXX'],
+  'M': ['X...X','XX.XX','X.X.X','X...X','X...X','X...X','X...X'],
+  'N': ['X...X','XX..X','X.X.X','X..XX','X...X','X...X','X...X'],
+  'O': [' XXX ','X...X','X...X','X...X','X...X','X...X',' XXX '],
+  'P': ['XXXX.','X...X','X...X','XXXX.','X....','X....','X....'],
+  'Q': [' XXX ','X...X','X...X','X...X','X.X.X','X..X.',' XX.X'],
+  'R': ['XXXX.','X...X','X...X','XXXX.','X.X..','X..X.','X...X'],
+  'S': [' XXXX','X....','X....',' XXX ','....X','....X','XXXX.'],
+  'T': ['XXXXX','..X..','..X..','..X..','..X..','..X..','..X..'],
+  'U': ['X...X','X...X','X...X','X...X','X...X','X...X',' XXX '],
+  'V': ['X...X','X...X','X...X','X...X','X...X','.X.X.','..X..'],
+  'W': ['X...X','X...X','X...X','X...X','X.X.X','XX.XX','X...X'],
+  'X': ['X...X','X...X','.X.X.','..X..','.X.X.','X...X','X...X'],
+  'Y': ['X...X','X...X','X...X','.X.X.','..X..','..X..','..X..'],
+  'Z': ['XXXXX','....X','...X.','..X..','.X...','X....','XXXXX'],
+
+  // ----- Lowercase a-z (x-height ~5 hàng dưới, hàng 0-1 trống cho ascender) -----
+  'a': ['.....','.....',' XXX.','....X',' XXXX','X...X',' XXXX'],
+  'b': ['X....','X....','XXXX.','X...X','X...X','X...X','XXXX.'],
+  'c': ['.....','.....',' XXXX','X....','X....','X....',' XXXX'],
+  'd': ['....X','....X','.XXXX','X...X','X...X','X...X','.XXXX'],
+  'e': ['.....','.....',' XXX ','X...X','XXXXX','X....',' XXX '],
+  'f': ['..XX.','.X..X','.X...','XXX..','.X...','.X...','.X...'],
+  'g': ['.....','.....',' XXXX','X...X',' XXXX','....X','XXXX.'],
+  'h': ['X....','X....','XXXX.','X...X','X...X','X...X','X...X'],
+  'i': ['..X..','.....','.XX..','..X..','..X..','..X..','.XXX.'],
+  'j': ['...X.','.....','..XX.','...X.','...X.','...X.','XXX..'],
+  'k': ['X....','X....','X..X.','X.X..','XX...','X.X..','X..X.'],
+  'l': ['.XX..','..X..','..X..','..X..','..X..','..X..','.XXX.'],
+  'm': ['.....','.....','XX.X.','X.X.X','X.X.X','X.X.X','X.X.X'],
+  'n': ['.....','.....','XXXX.','X...X','X...X','X...X','X...X'],
+  'o': ['.....','.....',' XXX ','X...X','X...X','X...X',' XXX '],
+  'p': ['.....','.....','XXXX.','X...X','XXXX.','X....','X....'],
+  'q': ['.....','.....','.XXXX','X...X','.XXXX','....X','....X'],
+  'r': ['.....','.....','X.XX.','XX..X','X....','X....','X....'],
+  's': ['.....','.....',' XXXX','X....',' XXX ','....X','XXXX.'],
+  't': ['.X...','.X...','XXX..','.X...','.X...','.X...','..XXX'],
+  'u': ['.....','.....','X...X','X...X','X...X','X...X',' XXXX'],
+  'v': ['.....','.....','X...X','X...X','X...X','.X.X.','..X..'],
+  'w': ['.....','.....','X...X','X...X','X.X.X','X.X.X','.X.X.'],
+  'x': ['.....','.....','X...X','.X.X.','..X..','.X.X.','X...X'],
+  'y': ['.....','.....','X...X','X...X',' XXXX','....X','XXXX.'],
+  'z': ['.....','.....','XXXXX','...X.','..X..','.X...','XXXXX'],
+
+  // ----- Vietnamese chars cần cho user defaults -----
+  // ả = a + hook above (móc trên)
+  'ả': ['..X..','..X..',' XXX.','....X',' XXXX','X...X',' XXXX'],
+  // ẫ = a + circumflex + tilde
+  'ẫ': ['.X.X.','..X..',' XXX.','....X',' XXXX','X...X',' XXXX'],
+  // ấ = a + circumflex + acute
+  'ấ': ['..X..','.XX..',' XXX.','....X',' XXXX','X...X',' XXXX'],
+  // ầ = a + circumflex + grave
+  'ầ': ['..X..','.XX..',' XXX.','....X',' XXXX','X...X',' XXXX'],
+  // ậ = a + circumflex + dot below
+  'ậ': ['..X..','.X.X.',' XXX.','....X',' XXXX','X...X','..X..'],
+  // à
+  'à': ['.X...','..X..',' XXX.','....X',' XXXX','X...X',' XXXX'],
+  // á
+  'á': ['...X.','..X..',' XXX.','....X',' XXXX','X...X',' XXXX'],
+  // ã
+  'ã': ['.X.X.','X.X.X',' XXX.','....X',' XXXX','X...X',' XXXX'],
+  // ạ
+  'ạ': ['.....','.....',' XXX.','....X',' XXXX','X...X','..X..'],
+  // ă (a + breve)
+  'ă': ['.....','X...X',' XXX.','....X',' XXXX','X...X',' XXXX'],
+  // â (a + circumflex only)
+  'â': ['..X..','.X.X.',' XXX.','....X',' XXXX','X...X',' XXXX'],
+
+  // o variants
+  'ô': ['..X..','.X.X.','.....',' XXX ','X...X','X...X',' XXX '],
+  'ơ': ['.....','...X.',' XXXX','X..XX','X...X','X...X',' XXX '],
+  'ò': ['.X...','..X..','.....',' XXX ','X...X','X...X',' XXX '],
+  'ó': ['...X.','..X..','.....',' XXX ','X...X','X...X',' XXX '],
+  'ỏ': ['..X..','..X..','.....',' XXX ','X...X','X...X',' XXX '],
+  'õ': ['.X.X.','X.X.X','.....',' XXX ','X...X','X...X',' XXX '],
+  'ọ': ['.....','.....',' XXX ','X...X','X...X','X...X','..X..'],
+
+  // e variants
+  'ê': ['..X..','.X.X.','.....',' XXX ','X...X','XXXXX',' XXX '],
+  'è': ['.X...','..X..','.....',' XXX ','X...X','XXXXX',' XXX '],
+  'é': ['...X.','..X..','.....',' XXX ','X...X','XXXXX',' XXX '],
+  'ẻ': ['..X..','..X..','.....',' XXX ','X...X','XXXXX',' XXX '],
+
+  // i variants
+  'ì': ['.X...','..X..','.....','.XX..','..X..','..X..','.XXX.'],
+  'í': ['...X.','..X..','.....','.XX..','..X..','..X..','.XXX.'],
+
+  // u variants
+  'ư': ['.....','...XX','X...X','X...X','X...X','X...X',' XXXX'],
+  'ú': ['...X.','..X..','X...X','X...X','X...X','X...X',' XXXX'],
+  'ù': ['.X...','..X..','X...X','X...X','X...X','X...X',' XXXX'],
+
+  // y variants
+  'ý': ['...X.','..X..','X...X','X...X',' XXXX','....X','XXXX.'],
+
+  // Đ đ
+  'Đ': ['XXXX.','X...X','X...X','XXX.X','X...X','X...X','XXXX.'],
+  'đ': ['....X','..XXX','....X','.XXXX','X...X','X...X','.XXXX'],
+
+  // Uppercase Vietnamese (rough — mostly user uses ASCII uppercase)
+  'Ả': ['..X..',' XXX.','X...X','X...X','XXXXX','X...X','X...X'],
+  'Ẫ': ['.X.X.','..X..','X...X','XXXXX','X...X','X...X','X...X'],
+  'Â': ['..X..','.X.X.',' XXX ','X...X','XXXXX','X...X','X...X'],
+  'Ă': ['X...X',' XXX ','X...X','XXXXX','X...X','X...X','X...X'],
+  'Ê': ['..X..','XXXXX','X....','XXXX.','X....','X....','XXXXX'],
+  'Ô': ['..X..','.X.X.',' XXX ','X...X','X...X','X...X',' XXX '],
+  'Ơ': ['...XX',' XXXX','X..XX','X...X','X...X','X...X',' XXX '],
+  'Ư': ['...XX','X...X','X...X','X...X','X...X','X...X',' XXXX']
+  }
+};
+
+// Map 5 nấc cỡ chữ → font + scale.
+// Nấc 1-3 (mới): font 3×5 với các scale 1,2,3 → 5,10,15 cells tall (nhỏ hơn).
+// Wait không, đảo lại: 1=3×5×1 (smallest 5h), 2=5×7×1 (7h, giữ), 3=3×5×2 (10h),
+// 4=5×7×2 (14h, giữ), 5=3×5×3 (15h).
+const LEVEL_TO_FONT = {
+  1: { font: FONT_3x5, scale: 1 },  //  5 cells tall — micro (font 3×5)
+  2: { font: FONT_5x7, scale: 1 },  //  7 cells tall — small (font 5×7, was old level 1)
+  3: { font: FONT_3x5, scale: 2 },  // 10 cells tall — med-small (font 3×5 × 2)
+  4: { font: FONT_5x7, scale: 2 },  // 14 cells tall — medium (font 5×7 × 2, was old level 2)
+  5: { font: FONT_3x5, scale: 3 }   // 15 cells tall — med-large (font 3×5 × 3)
+};
+
+// Lấy glyph cho 1 ký tự — thử char gốc, uppercase, NFD base, '?'.
+function getBitmapGlyph(font, ch) {
+  if (font.chars[ch]) return font.chars[ch];
+  const upper = ch.toUpperCase();
+  if (font.chars[upper]) return font.chars[upper];
+  // NFD decompose: bỏ diacritic, lấy ký tự base
+  const nfd = ch.normalize('NFD');
+  const base = nfd[0];
+  if (font.chars[base]) return font.chars[base];
+  const baseUpper = base.toUpperCase();
+  if (font.chars[baseUpper]) return font.chars[baseUpper];
+  return font.chars['?'] || font.chars[' '] || null;
+}
+
+// Render 1 dòng text bitmap vào data (lưới LED), tự căn giữa ngang
+function renderBitmapLine(text, yCenter, color, font, scale, spacing, data, rows, cols) {
+  const charWPx = font.W * scale;
+  const spaceWPx = spacing * scale;
+  const totalW = text.length * charWPx + Math.max(0, text.length - 1) * spaceWPx;
+  const startX = Math.floor((cols - totalW) / 2);
+  const startY = Math.round(yCenter - (font.H * scale) / 2);
+
+  let cursorX = startX;
+  for (let ci = 0; ci < text.length; ci++) {
+    const glyph = getBitmapGlyph(font, text[ci]);
+    if (!glyph) { cursorX += charWPx + spaceWPx; continue; }
+    for (let dy = 0; dy < font.H; dy++) {
+      const row = glyph[dy] || '';
+      for (let dx = 0; dx < font.W; dx++) {
+        if (row[dx] !== 'X') continue;
+        for (let sy = 0; sy < scale; sy++) {
+          for (let sx = 0; sx < scale; sx++) {
+            const r = startY + dy * scale + sy;
+            const c = cursorX + dx * scale + sx;
+            if (r >= 0 && r < rows && c >= 0 && c < cols && !data[r][c]) {
+              data[r][c] = { color };
+            }
+          }
+        }
+      }
+    }
+    cursorX += charWPx + spaceWPx;
+  }
+}
+
+// Tính bề ngang text ở font + scale + spacing cho trước (đơn vị: LED cells)
+function textWidthCells(text, font, scale, spacing) {
+  if (text.length === 0) return 0;
+  return text.length * font.W * scale + Math.max(0, text.length - 1) * spacing * scale;
+}
+
+// Wrap text thành nhiều physical lines, break tại space.
+function wrapTextToFit(text, font, scale, spacing, maxW) {
+  const words = text.split(' ');
+  const lines = [];
+  let current = '';
+  for (const word of words) {
+    if (!word) continue;
+    const candidate = current ? current + ' ' + word : word;
+    if (textWidthCells(candidate, font, scale, spacing) <= maxW) {
+      current = candidate;
+    } else {
+      if (current) lines.push(current);
+      current = word;
+    }
+  }
+  if (current) lines.push(current);
+  return lines.length > 0 ? lines : [text];
+}
+
+// TÔN TRỌNG TUYỆT ĐỐI nấc cỡ chữ user chọn. KHÔNG tự auto-shrink scale/font.
+// Text quá dài → wrap nhiều dòng. Word đơn quá dài → chấp nhận clip ngang.
+function fitAndWrap(text, level, cols) {
+  const cfg = LEVEL_TO_FONT[level] || LEVEL_TO_FONT[2];
+  const { font, scale } = cfg;
+  const w1 = wrapTextToFit(text, font, scale, 1, cols);
+  const w0 = wrapTextToFit(text, font, scale, 0, cols);
+  if (w0.length < w1.length) return { font, scale, spacing: 0, lines: w0 };
+  return { font, scale, spacing: 1, lines: w1 };
+}
+
+// Render text với wrap — nhiều physical lines stacked, căn giữa quanh yCenter
+function renderBitmapWrapped(text, yCenter, color, fit, data, rows, cols) {
+  const { font, scale, spacing, lines: wrapped } = fit;
+  const N = wrapped.length;
+  const lineH = font.H * scale;
+  const lineGap = scale; // 1 cell gap (scaled)
+  const totalH = N * lineH + Math.max(0, N - 1) * lineGap;
+  const yTop = yCenter - totalH / 2;
+  for (let i = 0; i < N; i++) {
+    const lineY = yTop + lineH / 2 + i * (lineH + lineGap);
+    renderBitmapLine(wrapped[i], lineY, color, font, scale, spacing, data, rows, cols);
+  }
+}
+
+
+const EFFECTS = [
+  { id: 'static',       name: 'Tĩnh' },
+  { id: 'blink',        name: 'Nhấp nháy' },
+  { id: 'border-chase', name: 'Viền chạy' },
+  { id: 'rainbow',      name: 'Đổi màu' }
+];
+
+// ---------- Default state ----------
+const DEFAULT_STATE = {
+  size: '50x70',
+  orientation: 'portrait',  // 'portrait' (dọc) | 'landscape' (ngang)
+  line1: 'SEONGON SG',  line1On: true, line1Size: 3, line1Color: '#ff2530',
+  line2: 'Bảng LED Vẫy', line2On: true, line2Size: 2, line2Color: '#ffd200',
+  line3: '0909 999 999', line3On: true, line3Size: 1, line3Color: '#ffffff',
+  bgColor: '#000000',
+  font: 'sans',
+  effect: 'static',
+  showBorder: true,
+  borderColor: '#ff2530',
+  mode: 'night'
+};
+
+let state = { ...DEFAULT_STATE };
+
+// ---------- DOM ----------
+const $ = (s, root = document) => root.querySelector(s);
+const $$ = (s, root = document) => Array.from(root.querySelectorAll(s));
+
+// ---------- Init UI ----------
+function initUI() {
+  // Size cards
+  const sizeWrap = $('#size-options');
+  Object.entries(SIZES).forEach(([k, v]) => {
+    const ratio = v.w / v.h;
+    const el = document.createElement('button');
+    el.className = 'size-card rounded-xl p-3 sm:p-4 text-left bg-slate-900/60';
+    el.dataset.size = k;
+    el.innerHTML = `
+      <div class="flex items-end justify-center mb-2 h-16">
+        <div class="size-thumb bg-slate-800 border-2 border-slate-700 rounded" style="width:${ratio*48}px; height:48px;"></div>
+      </div>
+      <div class="font-bold text-sm">${v.label}</div>
+      <div class="text-xs text-slate-400 mt-0.5">${Math.floor(v.w/PITCH)} × ${Math.floor(v.h/PITCH)} LED</div>
+    `;
+    el.onclick = () => { state.size = k; refresh(); };
+    sizeWrap.appendChild(el);
+  });
+
+  // Orientation buttons
+  $$('.orientation-btn').forEach(b => {
+    b.addEventListener('click', () => {
+      state.orientation = b.dataset.value;
+      refresh();
+    });
+  });
+
+  // Swatch rows (line colors + border color)
+  $$('.swatch-row').forEach(row => {
+    LED_COLORS.forEach(c => {
+      const s = document.createElement('button');
+      s.className = 'swatch';
+      s.style.background = c.value;
+      s.title = c.name;
+      s.dataset.value = c.value;
+      s.onclick = () => { state[row.dataset.target] = c.value; refresh(); };
+      row.appendChild(s);
+    });
+  });
+
+  // Background swatches
+  const bgWrap = $('#bg-swatches');
+  BG_COLORS.forEach(c => {
+    const s = document.createElement('button');
+    s.className = 'swatch flex items-center gap-2';
+    s.style.background = c.value;
+    s.title = c.name;
+    s.dataset.value = c.value;
+    s.onclick = () => { state.bgColor = c.value; refresh(); };
+    bgWrap.appendChild(s);
+  });
+
+  // Font options
+  const fontWrap = $('#font-options');
+  FONTS.forEach(f => {
+    const btn = document.createElement('button');
+    btn.className = 'chip';
+    btn.dataset.value = f.id;
+    btn.textContent = f.name;
+    btn.style.fontFamily = `"${f.family}"`;
+    btn.onclick = () => { state.font = f.id; refresh(); };
+    fontWrap.appendChild(btn);
+  });
+
+  // Effect options
+  const effWrap = $('#effect-options');
+  EFFECTS.forEach(e => {
+    const btn = document.createElement('button');
+    btn.className = 'chip text-center justify-center w-full';
+    btn.dataset.value = e.id;
+    btn.textContent = e.name;
+    btn.onclick = () => { state.effect = e.id; refresh(); };
+    effWrap.appendChild(btn);
+  });
+
+  // Text inputs
+  $$('input[data-state]').forEach(inp => {
+    inp.addEventListener('input', () => {
+      state[inp.dataset.state] = inp.value;
+      refresh();
+    });
+  });
+
+  // Line toggles
+  $$('.line-toggle').forEach(cb => {
+    cb.addEventListener('change', () => {
+      state[cb.dataset.target] = cb.checked;
+      refresh();
+    });
+  });
+
+  // Size sliders per line
+  $$('.size-slider').forEach(s => {
+    s.addEventListener('input', () => {
+      const target = s.dataset.target;
+      const value = parseInt(s.value, 10);
+      state[target] = value;
+      const label = document.querySelector(`.size-value[data-target="${target}"]`);
+      if (label) label.textContent = value;
+      refresh();
+    });
+  });
+
+  // Border toggle
+  $('#border-toggle').addEventListener('change', e => {
+    state.showBorder = e.target.checked;
+    refresh();
+  });
+
+  // Mode buttons (day/night)
+  $$('.mode-btn').forEach(b => {
+    b.addEventListener('click', () => {
+      state.mode = b.dataset.mode;
+      refresh();
+    });
+  });
+
+  // Download
+  $('#download-btn').addEventListener('click', downloadPNG);
+
+  // Reset
+  $('#reset-btn').addEventListener('click', () => {
+    state = { ...DEFAULT_STATE };
+    syncUIFromState();
+    refresh();
+  });
+
+  // Gallery
+  buildGallery();
+
+  syncUIFromState();
+}
+
+function syncUIFromState() {
+  // Reflect state into UI controls
+  $$('[data-size]').forEach(el => el.classList.toggle('active', el.dataset.size === state.size));
+
+  // Orientation buttons
+  $$('.orientation-btn').forEach(b => {
+    b.classList.toggle('active', b.dataset.value === state.orientation);
+  });
+
+  // Size thumbs — rotate visually when landscape
+  $$('.size-card').forEach(card => {
+    const thumb = card.querySelector('.size-thumb');
+    if (thumb && state.orientation === 'landscape') {
+      thumb.style.transform = 'rotate(90deg)';
+    } else if (thumb) {
+      thumb.style.transform = 'none';
+    }
+  });
+
+  // Line texts
+  ['line1','line2','line3'].forEach(k => {
+    const inp = $(`input[data-state="${k}"]`);
+    if (inp) inp.value = state[k];
+  });
+
+  // Line toggles
+  ['line1On','line2On','line3On'].forEach(k => {
+    const cb = $(`.line-toggle[data-target="${k}"]`);
+    if (cb) cb.checked = state[k];
+  });
+
+  // Size sliders + nhãn nấc
+  $$('.size-slider').forEach(s => {
+    const target = s.dataset.target;
+    s.value = state[target];
+    const label = document.querySelector(`.size-value[data-target="${target}"]`);
+    if (label) label.textContent = state[target];
+  });
+
+  // Swatches (line colors + border)
+  $$('.swatch-row').forEach(row => {
+    const target = row.dataset.target;
+    Array.from(row.children).forEach(sw => {
+      sw.classList.toggle('active', sw.dataset.value === state[target]);
+    });
+  });
+
+  // BG swatches
+  Array.from($('#bg-swatches').children).forEach(sw => {
+    sw.classList.toggle('active', sw.dataset.value === state.bgColor);
+  });
+
+  // Font
+  Array.from($('#font-options').children).forEach(b => {
+    b.classList.toggle('active', b.dataset.value === state.font);
+  });
+
+  // Effect
+  Array.from($('#effect-options').children).forEach(b => {
+    b.classList.toggle('active', b.dataset.value === state.effect);
+  });
+
+  // Border toggle
+  $('#border-toggle').checked = state.showBorder;
+
+  // Mode buttons
+  $$('.mode-btn').forEach(b => {
+    const active = b.dataset.mode === state.mode;
+    b.classList.toggle('bg-brand-500', active);
+    b.classList.toggle('text-white', active);
+    b.classList.toggle('text-slate-400', !active);
+  });
+
+  // Info display (số bóng LED sẽ được cập nhật trong render())
+  $('#info-size').textContent = getBoardDims().label;
+}
+
+// ---------- LED Mask (offscreen text → LED on/off grid) ----------
+let maskCache = null;
+let maskCacheKey = '';
+
+function getMaskKey() {
+  return JSON.stringify({
+    s: state.size,
+    o: state.orientation,
+    f: state.font,
+    a: [state.line1, state.line1On, state.line1Size, state.line1Color],
+    b: [state.line2, state.line2On, state.line2Size, state.line2Color],
+    c: [state.line3, state.line3On, state.line3Size, state.line3Color]
+  });
+}
+
+function computeMask() {
+  const key = getMaskKey();
+  if (key === maskCacheKey && maskCache) return maskCache;
+
+  const { cols, rows } = getBoardDims();
+  const data = Array.from({ length: rows }, () => Array(cols).fill(null));
+
+  // Build lines (level = nấc 1-5 do user chọn)
+  const lines = [];
+  if (state.line1On && state.line1.trim()) lines.push({ text: state.line1.trim(), color: state.line1Color, level: state.line1Size });
+  if (state.line2On && state.line2.trim()) lines.push({ text: state.line2.trim(), color: state.line2Color, level: state.line2Size });
+  if (state.line3On && state.line3.trim()) lines.push({ text: state.line3.trim(), color: state.line3Color, level: state.line3Size });
+
+  if (lines.length === 0) {
+    maskCache = { cols, rows, data };
+    maskCacheKey = key;
+    return maskCache;
+  }
+
+  // Mode + fit cho từng dòng. Outline mode đã tắt — single mode dùng bitmap cho mọi nấc.
+  for (const line of lines) {
+    line.useOutline = false;
+    line.fit = fitAndWrap(line.text, line.level, cols);
+    const N = line.fit.lines.length;
+    line.height = N * line.fit.font.H * line.fit.scale + Math.max(0, N - 1) * line.fit.scale;
+  }
+
+  // Phân bổ dọc: gap đều giữa các dòng, dựa trên chiều cao thực tế
+  const totalContentHeight = lines.reduce((s, l) => s + l.height, 0);
+  const numGaps = lines.length + 1;
+  const gapPx = Math.max(1, (rows - totalContentHeight) / numGaps);
+
+  let yCursor = gapPx;
+  for (const line of lines) {
+    line.yCenterCells = yCursor + line.height / 2;
+    yCursor += line.height + gapPx;
+  }
+
+  // ============================================================================
+  // SINGLE MODE: BITMAP FONT — vẽ trực tiếp từng pixel của font 5×7 vào lưới LED
+  // Không qua Canvas, không AA, không hinting. Mỗi pixel "X" = 1 bóng LED.
+  // Scale = nấc do user chọn → tăng nấc thì mỗi pixel font thành ô scale×scale LED
+  // → tổng số bóng LED tăng theo scale².
+  // ============================================================================
+  for (const line of lines) {
+    if (line.useOutline) continue;
+    renderBitmapWrapped(line.text, line.yCenterCells, line.color, line.fit, data, rows, cols);
+  }
+
+  // ============================================================================
+  // OUTLINE MODE: Canvas + edge detection — chỉ dùng cho L size + bảng 60×80
+  // ============================================================================
+  const outlineLines = lines.filter(l => l.useOutline);
+  if (outlineLines.length > 0) {
+    const HIRES = 4;
+    const w = cols * HIRES, h = rows * HIRES;
+    const font = FONTS.find(f => f.id === state.font);
+
+    const off = document.createElement('canvas');
+    off.width = w; off.height = h;
+    const ctx = off.getContext('2d');
+
+    for (const line of outlineLines) {
+      // fontPx tỉ lệ với chiều cao bitmap để outline mode trông to tương đương single mode cùng nấc
+      let fontPx = line.height * HIRES * font.scale;
+      ctx.font = `${font.wOutline} ${fontPx}px "${font.family}", system-ui, sans-serif`;
+
+      const maxW = w * 0.92;
+      let measured = ctx.measureText(line.text);
+      if (measured.width > maxW) {
+        fontPx *= maxW / measured.width;
+        ctx.font = `${font.wOutline} ${fontPx}px "${font.family}", system-ui, sans-serif`;
+      }
+
+      ctx.fillStyle = line.color;
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText(line.text, w / 2, line.yCenterCells * HIRES);
+    }
+
+    const img = ctx.getImageData(0, 0, w, h).data;
+    const ALPHA_ON = 96;
+    const edges = new Uint8Array(w * h);
+    for (let y = 1; y < h - 1; y++) {
+      for (let x = 1; x < w - 1; x++) {
+        const i = (y * w + x) * 4;
+        if (img[i + 3] < ALPHA_ON) continue;
+        const aN = img[((y - 1) * w + x) * 4 + 3];
+        const aS = img[((y + 1) * w + x) * 4 + 3];
+        const aE = img[(y * w + (x + 1)) * 4 + 3];
+        const aW = img[(y * w + (x - 1)) * 4 + 3];
+        if (aN < ALPHA_ON || aS < ALPHA_ON || aE < ALPHA_ON || aW < ALPHA_ON) {
+          edges[y * w + x] = 1;
+        }
+      }
+    }
+
+    const MIN_EDGE_PX = 3;
+    for (let r = 0; r < rows; r++) {
+      for (let c = 0; c < cols; c++) {
+        if (data[r][c]) continue;
+        let R = 0, G = 0, B = 0, count = 0;
+        for (let dy = 0; dy < HIRES; dy++) {
+          for (let dx = 0; dx < HIRES; dx++) {
+            const x = c * HIRES + dx;
+            const y = r * HIRES + dy;
+            if (edges[y * w + x]) {
+              const i = (y * w + x) * 4;
+              R += img[i]; G += img[i + 1]; B += img[i + 2];
+              count++;
+            }
+          }
+        }
+        if (count >= MIN_EDGE_PX) {
+          data[r][c] = { color: `rgb(${Math.round(R/count)}, ${Math.round(G/count)}, ${Math.round(B/count)})` };
+        }
+      }
+    }
+  }
+
+  maskCache = { cols, rows, data };
+  maskCacheKey = key;
+  return maskCache;
+}
+
+function fillStrokeGaps(data, rows, cols) {
+  const toFill = [];
+  for (let r = 1; r < rows - 1; r++) {
+    for (let c = 1; c < cols - 1; c++) {
+      if (data[r][c]) continue;
+
+      // Đếm tổng số láng giềng "on" — nếu ≥ 5 thì đây là center của vùng kín (vd: hollow giữa
+      // chữ "O") → KHÔNG fill, tránh lấp mất hollow.
+      let onCount = 0;
+      for (let dr = -1; dr <= 1; dr++) {
+        for (let dc = -1; dc <= 1; dc++) {
+          if (dr === 0 && dc === 0) continue;
+          if (data[r + dr][c + dc]) onCount++;
+        }
+      }
+      if (onCount >= 5) continue;
+
+      // Check 4 trục đối xứng — nếu cả 2 cell đối nhau đều sáng → bridge "đứt 1 cell"
+      const pairs = [
+        [data[r][c - 1],     data[r][c + 1]],      // ngang
+        [data[r - 1][c],     data[r + 1][c]],      // dọc
+        [data[r - 1][c - 1], data[r + 1][c + 1]],  // chéo \
+        [data[r - 1][c + 1], data[r + 1][c - 1]]   // chéo /
+      ];
+      for (const [a, b] of pairs) {
+        if (a && b) {
+          const ca = parseRGB(a.color), cb = parseRGB(b.color);
+          const color = `rgb(${Math.round((ca[0]+cb[0])/2)}, ${Math.round((ca[1]+cb[1])/2)}, ${Math.round((ca[2]+cb[2])/2)})`;
+          toFill.push({ r, c, color });
+          break;
+        }
+      }
+    }
+  }
+  for (const f of toFill) data[f.r][f.c] = { color: f.color };
+}
+
+function parseRGB(rgbStr) {
+  const m = rgbStr.match(/\d+/g);
+  return m ? [parseInt(m[0]), parseInt(m[1]), parseInt(m[2])] : [255, 255, 255];
+}
+
+// ============================================================================
+// Zhang-Suen Thinning Algorithm
+// Lấy hình chữ đầy → gọt từng lớp pixel viền → chỉ còn lại "xương" 1 pixel
+// (giữ nguyên topology: O vẫn rỗng, A vẫn có khoảng giữa, 8 vẫn 2 vòng v.v.)
+// Áp dụng trực tiếp trên lưới LED (rows × cols), nhanh và đảm bảo 1 LED bề ngang.
+// ============================================================================
+function skeletonizeMask(data, rows, cols) {
+  // Build binary representation
+  const bin = new Uint8Array(rows * cols);
+  for (let r = 0; r < rows; r++) {
+    for (let c = 0; c < cols; c++) {
+      if (data[r][c]) bin[r * cols + c] = 1;
+    }
+  }
+
+  const idx = (r, c) => r * cols + c;
+  let changed = true;
+  let safety = 0;
+
+  while (changed && safety < 30) {
+    changed = false;
+    safety++;
+
+    // Hai sub-iteration trên mỗi vòng (chuẩn Zhang-Suen)
+    for (let step = 0; step < 2; step++) {
+      const toRemove = [];
+
+      for (let r = 1; r < rows - 1; r++) {
+        for (let c = 1; c < cols - 1; c++) {
+          if (bin[idx(r, c)] !== 1) continue;
+
+          // 8 láng giềng theo chiều kim đồng hồ bắt đầu từ Bắc
+          const p2 = bin[idx(r - 1, c    )];
+          const p3 = bin[idx(r - 1, c + 1)];
+          const p4 = bin[idx(r,     c + 1)];
+          const p5 = bin[idx(r + 1, c + 1)];
+          const p6 = bin[idx(r + 1, c    )];
+          const p7 = bin[idx(r + 1, c - 1)];
+          const p8 = bin[idx(r,     c - 1)];
+          const p9 = bin[idx(r - 1, c - 1)];
+
+          // B = số láng giềng "on" (2 ≤ B ≤ 6 mới được xét xoá)
+          const B = p2 + p3 + p4 + p5 + p6 + p7 + p8 + p9;
+          if (B < 2 || B > 6) continue;
+
+          // A = số lần chuyển 0→1 trong chuỗi P2..P9..P2 (phải đúng = 1)
+          let A = 0;
+          if (p2 === 0 && p3 === 1) A++;
+          if (p3 === 0 && p4 === 1) A++;
+          if (p4 === 0 && p5 === 1) A++;
+          if (p5 === 0 && p6 === 1) A++;
+          if (p6 === 0 && p7 === 1) A++;
+          if (p7 === 0 && p8 === 1) A++;
+          if (p8 === 0 && p9 === 1) A++;
+          if (p9 === 0 && p2 === 1) A++;
+          if (A !== 1) continue;
+
+          // Điều kiện riêng cho từng sub-iteration
+          if (step === 0) {
+            if (p2 && p4 && p6) continue;  // ít nhất 1 trong N/E/S phải = 0
+            if (p4 && p6 && p8) continue;  // ít nhất 1 trong E/S/W phải = 0
+          } else {
+            if (p2 && p4 && p8) continue;  // ít nhất 1 trong N/E/W phải = 0
+            if (p2 && p6 && p8) continue;  // ít nhất 1 trong N/S/W phải = 0
+          }
+
+          toRemove.push(idx(r, c));
+        }
+      }
+
+      for (let i = 0; i < toRemove.length; i++) bin[toRemove[i]] = 0;
+      if (toRemove.length > 0) changed = true;
+    }
+  }
+
+  // Áp kết quả binary trở lại data — giữ màu của cell sống sót
+  for (let r = 0; r < rows; r++) {
+    for (let c = 0; c < cols; c++) {
+      if (bin[idx(r, c)] === 0) data[r][c] = null;
+    }
+  }
+}
+
+// ---------- Sprite cache (pre-rendered glowing LEDs for speed) ----------
+const spriteCache = new Map();
+function getLEDSprite(color, radiusPx, withGlow) {
+  const key = `${color}|${radiusPx.toFixed(2)}|${withGlow?1:0}`;
+  if (spriteCache.has(key)) return spriteCache.get(key);
+
+  const padding = withGlow ? radiusPx * 3.2 : radiusPx * 0.5;
+  const sz = Math.ceil((radiusPx + padding) * 2);
+  const c = document.createElement('canvas');
+  c.width = sz; c.height = sz;
+  const ctx = c.getContext('2d');
+
+  if (withGlow) {
+    ctx.shadowColor = color;
+    ctx.shadowBlur = radiusPx * 2.4;
+    ctx.fillStyle = color;
+    ctx.beginPath();
+    ctx.arc(sz/2, sz/2, radiusPx, 0, Math.PI * 2);
+    ctx.fill();
+    // Add brighter core
+    ctx.shadowBlur = 0;
+    const g = ctx.createRadialGradient(sz/2, sz/2, 0, sz/2, sz/2, radiusPx);
+    g.addColorStop(0, 'rgba(255,255,255,0.85)');
+    g.addColorStop(0.4, color);
+    g.addColorStop(1, color);
+    ctx.fillStyle = g;
+    ctx.beginPath();
+    ctx.arc(sz/2, sz/2, radiusPx, 0, Math.PI * 2);
+    ctx.fill();
+  } else {
+    ctx.fillStyle = color;
+    ctx.beginPath();
+    ctx.arc(sz/2, sz/2, radiusPx, 0, Math.PI * 2);
+    ctx.fill();
+  }
+
+  spriteCache.set(key, c);
+  return c;
+}
+
+// ---------- Render ----------
+let animPhase = 0;
+let animRAF = null;
+let lastFrameTime = 0;
+
+function clearSpriteCacheIfTooBig() {
+  if (spriteCache.size > 60) spriteCache.clear();
+}
+
+function render() {
+  const canvas = $('#board-canvas');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+
+  const dims = getBoardDims();
+  const mask = computeMask();
+  const { cols, rows, data } = mask;
+
+  // Scaling: fit canvas inside container
+  const wrap = $('#canvas-wrap');
+  const maxW = Math.min(wrap.clientWidth - 32, 700);
+  const maxH = Math.min(window.innerHeight * 0.7, 640);
+  let scale = maxW / dims.w;
+  if (dims.h * scale > maxH) scale = maxH / dims.h;
+
+  const dpr = Math.min(window.devicePixelRatio || 1, 2);
+  const displayW = dims.w * scale;
+  const displayH = dims.h * scale;
+  canvas.style.width = displayW + 'px';
+  canvas.style.height = displayH + 'px';
+  canvas.width = Math.round(displayW * dpr);
+  canvas.height = Math.round(displayH * dpr);
+
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+  const pitchPx = PITCH * scale;
+  const ledRadius = Math.max((LED_DIAMETER / 2) * scale, 1.4);
+
+  // Background
+  ctx.fillStyle = state.bgColor;
+  ctx.fillRect(0, 0, displayW, displayH);
+
+  // Day mode: lighten background slightly to simulate ambient
+  // Night mode: keep dark for max contrast
+  const withGlow = state.mode === 'night';
+
+  // Off-LED color depends on board background brightness
+  const bgBright = isColorBright(state.bgColor);
+  const offColor = bgBright ? 'rgba(0,0,0,0.08)' : 'rgba(255,255,255,0.05)';
+
+  // Background canvas (day mode): wrap ambient
+  const ambient = state.mode === 'day' ? 0.35 : 0;
+  if (ambient > 0) {
+    ctx.fillStyle = `rgba(255,255,255,${ambient * 0.12})`;
+    ctx.fillRect(0, 0, displayW, displayH);
+  }
+
+  // Draw LEDs — chỉ vẽ TẠI vị trí thực sự có bóng (khoan lỗ + cắm bóng)
+  // Vị trí không thiết kế = không có lỗ = không vẽ gì (chỉ thấy nền Alu)
+  const perimTotal = 2 * (rows + cols) - 4;
+  const chasePos = (animPhase * 0.6) % perimTotal;
+  const chaseWave = Math.max(3, Math.floor(perimTotal * 0.05));
+
+  let bulbCount = 0;
+
+  for (let r = 0; r < rows; r++) {
+    for (let c = 0; c < cols; c++) {
+      const x = (c + 0.5) * pitchPx;
+      const y = (r + 0.5) * pitchPx;
+      const isBorder = r === 0 || r === rows - 1 || c === 0 || c === cols - 1;
+
+      // ===== BORDER LED =====
+      if (isBorder) {
+        if (!state.showBorder) continue;       // không bật viền → không có bóng
+        bulbCount++;
+        let color = state.borderColor;
+        let isOn = true;
+        if (state.effect === 'border-chase') {
+          const pi = perimIndex(r, c, rows, cols);
+          const d = circDist(pi, chasePos, perimTotal);
+          isOn = d < chaseWave;
+        } else if (state.effect === 'blink') {
+          isOn = Math.floor(animPhase / 25) % 2 === 0;
+        } else if (state.effect === 'rainbow') {
+          color = hueShift(state.borderColor, animPhase * 2);
+        }
+        if (isOn) drawOn(ctx, x, y, color, ledRadius, withGlow);
+        else      drawDimBulb(ctx, x, y, ledRadius, bgBright);
+        continue;
+      }
+
+      // ===== CONTENT LED =====
+      const cell = data[r][c];
+      if (!cell) continue;                     // không phải nét chữ → không có lỗ
+      bulbCount++;
+      let color = cell.color;
+      let isOn = true;
+      if (state.effect === 'blink') {
+        isOn = Math.floor(animPhase / 25) % 2 === 0;
+      } else if (state.effect === 'rainbow') {
+        color = hueShift(cell.color, animPhase * 2);
+      }
+      if (isOn) drawOn(ctx, x, y, color, ledRadius, withGlow);
+      else      drawDimBulb(ctx, x, y, ledRadius, bgBright);
+    }
+  }
+
+  // Update bulb count display
+  const ledCountEl = document.getElementById('info-led-count');
+  if (ledCountEl) ledCountEl.textContent = bulbCount.toLocaleString('vi-VN');
+
+  // Subtle frame around the board (Alu plate edge)
+  ctx.strokeStyle = 'rgba(255,255,255,0.05)';
+  ctx.lineWidth = 1;
+  ctx.strokeRect(0.5, 0.5, displayW - 1, displayH - 1);
+
+  // Update canvas wrap background per mode
+  wrap.style.background = state.mode === 'night'
+    ? 'radial-gradient(ellipse at center, #0a0e1a 0%, #050810 100%)'
+    : 'radial-gradient(ellipse at center, #5b6b85 0%, #2a3447 100%)';
+}
+
+function drawOn(ctx, x, y, color, radius, withGlow) {
+  const sp = getLEDSprite(color, radius, withGlow);
+  ctx.drawImage(sp, x - sp.width/2, y - sp.height/2);
+}
+function drawDimBulb(ctx, x, y, radius, bgBright) {
+  // LED chưa sáng nằm trong lỗ khoan — vẫn nhìn thấy chấm mờ
+  ctx.fillStyle = bgBright ? 'rgba(0,0,0,0.22)' : 'rgba(255,255,255,0.12)';
+  ctx.beginPath();
+  ctx.arc(x, y, radius * 0.7, 0, Math.PI * 2);
+  ctx.fill();
+}
+
+// Perimeter helpers
+function perimIndex(r, c, rows, cols) {
+  if (r === 0) return c;
+  if (c === cols - 1) return (cols - 1) + r;
+  if (r === rows - 1) return (cols - 1) + (rows - 1) + (cols - 1 - c);
+  return (cols - 1) + (rows - 1) + (cols - 1) + (rows - 1 - r);
+}
+function circDist(a, b, total) {
+  const d = Math.abs(a - b);
+  return Math.min(d, total - d);
+}
+
+// Color helpers
+function isColorBright(hex) {
+  const r = parseInt(hex.slice(1,3),16), g = parseInt(hex.slice(3,5),16), b = parseInt(hex.slice(5,7),16);
+  return (r * 299 + g * 587 + b * 114) / 1000 > 130;
+}
+function hueShift(rgbStr, deg) {
+  let r, g, b;
+  if (rgbStr.startsWith('#')) {
+    r = parseInt(rgbStr.slice(1,3),16);
+    g = parseInt(rgbStr.slice(3,5),16);
+    b = parseInt(rgbStr.slice(5,7),16);
+  } else {
+    const m = rgbStr.match(/\d+/g); if (!m) return rgbStr;
+    [r, g, b] = m.map(Number);
+  }
+  const [h, s, l] = rgb2hsl(r, g, b);
+  const [nr, ng, nb] = hsl2rgb((h + deg / 360) % 1, s, l);
+  return `rgb(${nr}, ${ng}, ${nb})`;
+}
+function rgb2hsl(r, g, b) {
+  r /= 255; g /= 255; b /= 255;
+  const mx = Math.max(r, g, b), mn = Math.min(r, g, b);
+  let h, s, l = (mx + mn) / 2;
+  if (mx === mn) { h = s = 0; }
+  else {
+    const d = mx - mn;
+    s = l > 0.5 ? d / (2 - mx - mn) : d / (mx + mn);
+    switch (mx) {
+      case r: h = (g - b) / d + (g < b ? 6 : 0); break;
+      case g: h = (b - r) / d + 2; break;
+      case b: h = (r - g) / d + 4; break;
+    }
+    h /= 6;
+  }
+  return [h, s, l];
+}
+function hsl2rgb(h, s, l) {
+  let r, g, b;
+  if (s === 0) { r = g = b = l; }
+  else {
+    const hue2rgb = (p, q, t) => {
+      if (t < 0) t += 1;
+      if (t > 1) t -= 1;
+      if (t < 1/6) return p + (q - p) * 6 * t;
+      if (t < 1/2) return q;
+      if (t < 2/3) return p + (q - p) * (2/3 - t) * 6;
+      return p;
+    };
+    const q = l < 0.5 ? l * (1 + s) : l + s - l * s;
+    const p = 2 * l - q;
+    r = hue2rgb(p, q, h + 1/3);
+    g = hue2rgb(p, q, h);
+    b = hue2rgb(p, q, h - 1/3);
+  }
+  return [Math.round(r*255), Math.round(g*255), Math.round(b*255)];
+}
+
+// ---------- Animation loop ----------
+function tick(ts) {
+  if (!lastFrameTime) lastFrameTime = ts;
+  const dt = ts - lastFrameTime;
+  lastFrameTime = ts;
+  animPhase += dt / 16.67;  // ~1 per frame at 60fps
+  render();
+  if (state.effect !== 'static') {
+    animRAF = requestAnimationFrame(tick);
+  } else {
+    animRAF = null;
+  }
+}
+function startAnim() {
+  if (animRAF) cancelAnimationFrame(animRAF);
+  lastFrameTime = 0;
+  if (state.effect !== 'static') {
+    animRAF = requestAnimationFrame(tick);
+  } else {
+    render();
+  }
+}
+
+// ---------- Public refresh ----------
+let refreshRAF = null;
+function refresh() {
+  // Update UI sync + info
+  syncUIFromState();
+  if (refreshRAF) cancelAnimationFrame(refreshRAF);
+  refreshRAF = requestAnimationFrame(() => {
+    refreshRAF = null;
+    clearSpriteCacheIfTooBig();
+    startAnim();
+  });
+}
+
+// ---------- Download PNG ----------
+function downloadPNG() {
+  const canvas = $('#board-canvas');
+  if (!canvas) return;
+  const link = document.createElement('a');
+  const name = `SEONGON-SG-${getBoardDims().label.replace('×','x').replace(/\s+/g,'')}.png`;
+  link.download = name;
+  link.href = canvas.toDataURL('image/png');
+  link.click();
+}
+
+// ---------- Gallery (preset designs) ----------
+const PRESETS = [
+  { industry: 'Cafe',     icon: '☕', size: '50x70', font: 'script',  bg: '#000000', l1: 'CAFE LUMOS', l1c: '#ffd200', l2: 'Cà phê - Bánh ngọt', l2c: '#ffffff', l3: '0909 111 222', l3c: '#ff4dab' },
+  { industry: 'Spa',      icon: '💆', size: '50x70', font: 'sans',    bg: '#000000', l1: 'BELLA SPA',  l1c: '#ff4dab', l2: 'Massage - Facial',    l2c: '#ffffff', l3: 'Mở cửa 9h-22h',  l3c: '#3399ff' },
+  { industry: 'Nhà thuốc',icon: '💊', size: '40x60', font: 'sans',    bg: '#000000', l1: 'NHÀ THUỐC',  l1c: '#3eff5e', l2: 'AN KHANG',            l2c: '#ffffff', l3: '0909 333 444',  l3c: '#3eff5e' },
+  { industry: 'Tóc',      icon: '✂',  size: '40x60', font: 'display', bg: '#000000', l1: 'HAIR SALON', l1c: '#ff2530', l2: 'Cắt - Nhuộm - Uốn',   l2c: '#ffd200', l3: 'NAM & NỮ',       l3c: '#ffffff' },
+  { industry: 'Quán ăn',  icon: '🍜', size: '60x80', font: 'display', bg: '#000000', l1: 'PHỞ HÀ NỘI', l1c: '#ff2530', l2: 'Phở bò - Bún chả',     l2c: '#ffd200', l3: 'MỞ 24/7',       l3c: '#ffffff' },
+  { industry: 'Karaoke',  icon: '🎤', size: '60x80', font: 'display', bg: '#000000', l1: 'KARAOKE',    l1c: '#ff4dab', l2: 'STAR VIP',             l2c: '#ffd200', l3: 'WELCOME',       l3c: '#3399ff' }
+];
+
+function buildGallery() {
+  const grid = $('#gallery-grid');
+  PRESETS.forEach((p, i) => {
+    const card = document.createElement('div');
+    card.className = 'reveal bg-slate-900 border border-slate-800 hover:border-brand-500/40 rounded-2xl p-5 transition cursor-pointer group';
+    card.innerHTML = `
+      <div class="aspect-[5/7] rounded-lg bg-black flex flex-col items-center justify-center text-center p-3 mb-4 border-2 border-slate-800 group-hover:border-brand-500/40 transition relative overflow-hidden">
+        <div class="font-display text-3xl tracking-wider" style="color:${p.l1c}; text-shadow: 0 0 8px ${p.l1c}, 0 0 16px ${p.l1c};">${p.l1}</div>
+        <div class="font-display text-base mt-2" style="color:${p.l2c}; text-shadow: 0 0 6px ${p.l2c};">${p.l2}</div>
+        <div class="text-xs mt-3" style="color:${p.l3c}; text-shadow: 0 0 6px ${p.l3c};">${p.l3}</div>
+        <div class="absolute inset-1 rounded-md pointer-events-none" style="box-shadow: inset 0 0 0 1px ${p.l1c}30;"></div>
+      </div>
+      <div class="flex items-center justify-between">
+        <div>
+          <div class="text-xs text-slate-400">${p.icon} ${p.industry}</div>
+          <div class="font-bold text-sm mt-0.5">${SIZES[p.size].label}</div>
+        </div>
+        <button class="text-xs bg-brand-500 hover:bg-brand-600 px-3 py-1.5 rounded-lg font-semibold transition">Dùng mẫu này</button>
+      </div>
+    `;
+    card.querySelector('button').onclick = (e) => {
+      e.stopPropagation();
+      applyPreset(p);
+    };
+    card.onclick = () => applyPreset(p);
+    grid.appendChild(card);
+  });
+}
+
+function applyPreset(p) {
+  state = {
+    ...DEFAULT_STATE,
+    size: p.size,
+    font: p.font,
+    bgColor: p.bg,
+    line1: p.l1, line1Color: p.l1c,
+    line2: p.l2, line2Color: p.l2c,
+    line3: p.l3, line3Color: p.l3c,
+  };
+  refresh();
+  document.getElementById('designer').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+// ---------- Reveal on scroll ----------
+function initReveal() {
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('in');
+        io.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.12 });
+  $$('.reveal').forEach(el => io.observe(el));
+}
+
+// ---------- Resize ----------
+let resizeTimer = null;
+window.addEventListener('resize', () => {
+  clearTimeout(resizeTimer);
+  resizeTimer = setTimeout(() => render(), 120);
+});
+
+// ---------- Boot ----------
+function boot() {
+  // Wait until fonts are loaded so text masks render correctly
+  if (document.fonts && document.fonts.ready) {
+    document.fonts.ready.then(() => {
+      initUI();
+      initReveal();
+      // Force re-compute mask once fonts ready
+      maskCacheKey = '';
+      refresh();
+    });
+  } else {
+    initUI();
+    initReveal();
+    refresh();
+  }
+}
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', boot);
+} else {
+  boot();
+}
+</script>
+</body>
+</html>
